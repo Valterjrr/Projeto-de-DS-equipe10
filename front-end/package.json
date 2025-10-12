@@ -1,5 +1,5 @@
 {
-      "name": "Curriculum Management Platform",
+      "name": "aid_curriculum",
       "version": "0.1.0",
       "private": true,
       "dependencies": {

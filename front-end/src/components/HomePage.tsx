@@ -10,7 +10,7 @@ export function HomePage({ onStart }: HomePageProps) {
     "Adaptabilidade ao perfil da vaga utilizando IA;",
     "Análise de currículo com base em um score próprio;",
     "Recomendação de melhorias e aperfeiçoamento em habilidades;",
-    "Um currículo pronto em pdf;",
+    "Um currículo pronto em PDF;",
     "E muito mais!"
   ];
 
@@ -148,7 +148,7 @@ export function HomePage({ onStart }: HomePageProps) {
                   fontFamily: 'Questrial, Helvetica World, sans-serif'
                 }}
               >
-                melhore suas chances pro seu emprego dos sonhos
+                <b>Clique aqui</b> e melhore suas chances pro seu emprego dos sonhos!
               </button>
             </motion.div>
           </div>
