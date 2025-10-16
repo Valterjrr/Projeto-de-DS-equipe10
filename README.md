@@ -14,13 +14,34 @@ Com ele, o usuário fornece informações básicas sobre a vaga desejada, experi
 - 📚 **Recomendações de aprendizado** e desenvolvimento de atributos
 
 
-## 🛠️ Tecnologias Utilizadas
+## 💻 Tecnologias Utilizadas
 
-Em desenvolvimento...
+Este projeto é construído com as seguintes tecnologias, divididas em Front-end e Back-end:
+
+### 🚀 Front-end
+
+| Categoria | Tecnologia | Descrição |
+| :--- | :--- | :--- |
+| **Linguagem** | **TypeScript** | Superconjunto do JavaScript para segurança e escalabilidade do código. |
+| **Framework UI** | **React** | Biblioteca principal para a construção da interface de usuário, baseada em componentes. |
+| **Componentes Base** | **Radix UI** | Biblioteca de primitivas de UI acessíveis e sem estilo. Usada como base para a criação dos nossos componentes customizados. |
+| **Estilização** | **Tailwind CSS** | Framework CSS de primeira linha para estilização utilitária rápida e consistente. |
+| **Base** | **HTML5/CSS3** | A fundação padrão para a estrutura e o estilo de toda a aplicação web. |
+| **Build Tool** | **Vite** | Ferramenta de build moderna e rápida, usada tanto para o desenvolvimento local quanto para o empacotamento em produção. |
+| **Gerenciador** | **npm** | Utilizado para instalar e gerenciar todas as dependências e *scripts* do projeto. |
+
+### 🧠 Back-end
+
+| Linguagem | Tecnologia | Descrição |
+| :--- | :--- | :--- |
+| **Python** | **FastAPI** | Framework Python moderno e rápido, utilizado para construir a API. |
+| **Python** | **Pydantic** | Biblioteca para validação de dados e gerenciamento de configurações, usada para garantir a integridade dos dados na API. |
+| **Python** | **Uvicorn** | Servidor ASGI de alta performance, necessário para rodar a aplicação FastAPI em produção. |
+| **Base** | **Node.js** | Ambiente de execução JavaScript utilizado para ferramentas de *scripting* de infraestrutura e utilidades do projeto. |
 
 ## ⚙️ Como Executar o Projeto
 
-Em desenvolvimento...
+Todas as instruções detalhadas para configurar o ambiente de desenvolvimento, incluindo a instalação de dependências (tanto Node.js quanto Python) e a criação/ativação do ambiente virtual (`venv`), estão localizadas em nosso arquivo de [**Diretrizes de Contribuição (CONTRIBUTING.md)**](./CONTRIBUTING.md).
 
 ## 🤝 Como Contribuir
 
