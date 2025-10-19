@@ -31,13 +31,7 @@ Este projeto é construído com as seguintes tecnologias, divididas em Front-end
 | **Gerenciador** | **npm** | Utilizado para instalar e gerenciar todas as dependências e *scripts* do projeto. |
 
 ### 🧠 Back-end
-
-| Linguagem | Tecnologia | Descrição |
-| :--- | :--- | :--- |
-| **Python** | **FastAPI** | Framework Python moderno e rápido, utilizado para construir a API. |
-| **Python** | **Pydantic** | Biblioteca para validação de dados e gerenciamento de configurações, usada para garantir a integridade dos dados na API. |
-| **Python** | **Uvicorn** | Servidor ASGI de alta performance, necessário para rodar a aplicação FastAPI em produção. |
-| **Base** | **Node.js** | Ambiente de execução JavaScript utilizado para ferramentas de *scripting* de infraestrutura e utilidades do projeto. |
+Estamos organizando nosso Back-end em um repositório a parte! Confira o nosso progresso [nesse link](https://github.com/LugiaKB/aid_curriculum_backend).
 
 ## ⚙️ Como Executar o Projeto
 
