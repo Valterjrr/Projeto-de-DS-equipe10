@@ -1,9 +1,9 @@
-const BASE_URL = import.meta.env.VITE_API_BASE_URL as string | undefined;
+// Prefer env var, fall back to deployed backend if not provided.
+const DEFAULT_BACKEND = "https://aid-curriculum-backend.onrender.com/";
+let BASE_URL = (import.meta.env.VITE_API_BASE_URL as string | undefined) || DEFAULT_BACKEND;
 
-if (!BASE_URL) {
-  // eslint-disable-next-line no-console
-  console.warn("VITE_API_BASE_URL is not defined. API calls will fail.");
-}
+// Ensure there's a trailing slash for consistent path joining
+if (!BASE_URL.endsWith("/")) BASE_URL = BASE_URL + "/";
 
 type HttpMethod = "GET" | "POST" | "PUT" | "PATCH" | "DELETE";
 
