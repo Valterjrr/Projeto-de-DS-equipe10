@@ -4,7 +4,6 @@ import { styleMap, type TemplateStyle } from './styles/cvStyles';
 interface CvPreviewProps {
   cv: GeneratedCV;
   style: TemplateStyle;
-  scale?: number;
 }
 
 function escapeHtml(input: string) {
@@ -17,7 +16,7 @@ function escapeHtml(input: string) {
     .replace(/'/g, '&#039;');
 }
 
-export function CvPreview({ cv, style, scale = 1 }: CvPreviewProps) {
+export function CvPreview({ cv, style }: CvPreviewProps) {
   const styles = styleMap[style];
   const { colors, fonts } = styles;
 
@@ -26,10 +25,12 @@ export function CvPreview({ cv, style, scale = 1 }: CvPreviewProps) {
       fontFamily: fonts?.body || 'system-ui, -apple-system, sans-serif',
       color: colors.text,
       lineHeight: 1.5,
-      transform: `scale(${scale})`,
-      transformOrigin: 'top left',
       padding: '2rem',
       background: colors.background,
+      width: '100%',
+      height: '100%',
+      maxWidth: '900px',
+      margin: '0 auto'
     }}>
       <h1 style={{
         fontFamily: fonts?.heading,
@@ -164,7 +165,7 @@ export function CvPreview({ cv, style, scale = 1 }: CvPreviewProps) {
         </section>
       )}
 
-      {cv.certifications?.length > 0 && (
+      {cv.certifications && cv.certifications.length > 0 && (
         <section className="mb-8">
           <h2 style={{
             fontFamily: fonts?.heading,
@@ -184,7 +185,7 @@ export function CvPreview({ cv, style, scale = 1 }: CvPreviewProps) {
         </section>
       )}
 
-      {cv.languages?.length > 0 && (
+      {cv.languages && cv.languages.length > 0 && (
         <section className="mb-8">
           <h2 style={{
             fontFamily: fonts?.heading,
@@ -207,7 +208,7 @@ export function CvPreview({ cv, style, scale = 1 }: CvPreviewProps) {
         </section>
       )}
 
-      {cv.achievements?.length > 0 && (
+      {cv.achievements && cv.achievements.length > 0 && (
         <section className="mb-8">
           <h2 style={{
             fontFamily: fonts?.heading,

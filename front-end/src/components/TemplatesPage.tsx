@@ -86,7 +86,6 @@ export function TemplatesPage({ onBack, analysis }: TemplatesPageProps) {
       <CvPreview
         cv={cv}
         style={template.style}
-        scale={1}
       />
     );
     container.appendChild(root);
@@ -238,9 +237,9 @@ export function TemplatesPage({ onBack, analysis }: TemplatesPageProps) {
           <DialogHeader>
             <DialogTitle>{selectedTemplate?.name}</DialogTitle>
           </DialogHeader>
-          <div className="p-6">
+          <div className="flex justify-center p-6">
             {cv && selectedTemplate ? (
-              <div className="transform scale-[0.8] origin-center">
+              <div className="overflow-auto" style={{ maxHeight: 'calc(90vh - 200px)' }}>
                 <CvPreview
                   cv={cv}
                   style={selectedTemplate.style}
