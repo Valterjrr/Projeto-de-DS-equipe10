@@ -2,7 +2,7 @@
 import logoPrincipalSrc from '../assets/logo-main.png';
 import logoMarcadorSrc from '../assets/logo-bullet.png';
 
-export function LogoMain({ className = "w-24 h-24" }: { className?: string }) {
+export function LogoMain({ className = "w-36 h-24" }: { className?: string }) {
   // 2. Use a tag <img> para exibir a logo principal.
   return (
     <img
@@ -13,7 +13,7 @@ export function LogoMain({ className = "w-24 h-24" }: { className?: string }) {
   );
 }
 
-export function LogoBullet({ className = "w-6 h-6" }: { className?: string }) {
+export function LogoBullet({ className = "w-9 h-6" }: { className?: string }) {
   // 3. Use a tag <img> para exibir a logo de marcador.
   return (
     <img 

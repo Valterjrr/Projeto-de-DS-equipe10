@@ -24,34 +24,20 @@ export function HomePage({ onStart }: HomePageProps) {
           transition={{ duration: 0.8 }}
           className="flex items-center gap-6 mb-4"
         >
-          <LogoMain className="w-24 h-24" />
+          <LogoMain className="w-36 h-24" />
           <h1 
             className="font-mono tracking-tight"
             style={{ 
-              color: '#2D6073',
-              fontSize: '4.5rem',
+              color: '#b5e8c3',
+              fontSize: '2.7rem',
               lineHeight: '1',
-              fontFamily: 'JetBrains Mono, monospace'
+              fontFamily: 'JetBrains Mono, monospace',
+              fontWeight: 100
             }}
           >
-            AId
+            Curriculum
           </h1>
         </motion.div>
-
-        <motion.h2
-          initial={{ opacity: 0 }}
-          animate={{ opacity: 1 }}
-          transition={{ delay: 0.3, duration: 0.8 }}
-          className="text-center mb-8"
-          style={{ 
-            color: '#65B8A6',
-            fontSize: '2.5rem',
-            lineHeight: '1.2',
-            fontFamily: 'Questrial, Helvetica World, sans-serif'
-          }}
-        >
-          Curriculum
-        </motion.h2>
 
         <motion.p
           initial={{ opacity: 0 }}

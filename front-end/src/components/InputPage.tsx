@@ -119,9 +119,8 @@ ${education}
             </button>
             
             <div className="flex items-center gap-3">
-              <LogoMain className="w-12 h-12" />
+              <LogoMain className="w-18 h-12" />
               <span className="text-2xl font-mono" style={{ color: '#2D6073', fontFamily: 'JetBrains Mono, monospace' }}>
-                AId
               </span>
             </div>
           </motion.div>
@@ -243,9 +242,8 @@ ${education}
             </button>
             
             <div className="flex items-center gap-3">
-              <LogoMain className="w-12 h-12" />
+              <LogoMain className="w-18 h-12" />
               <span className="text-2xl font-mono" style={{ color: '#2D6073', fontFamily: 'JetBrains Mono, monospace' }}>
-                AId
               </span>
             </div>
           </motion.div>
@@ -565,9 +563,8 @@ ${education}
             </button>
             
             <div className="flex items-center gap-3">
-              <LogoMain className="w-12 h-12" />
+              <LogoMain className="w-18 h-12" />
               <span className="text-2xl font-mono" style={{ color: '#2D6073', fontFamily: 'JetBrains Mono, monospace' }}>
-                AId
               </span>
             </div>
           </motion.div>
