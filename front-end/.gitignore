@@ -1,0 +1,49 @@
+# Node modules
+node_modules/
+
+# Build output
+/dist
+/build
+
+# Vite cache
+.vite
+
+# Dependency directories
+/.pnp
+.pnp.js
+
+# IDE files
+.vscode/
+.idea/
+*.suo
+*.ntvs*
+*.njsproj
+*.sln
+*.sw?
+
+# Log files
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+
+# OS files
+.DS_Store
+Thumbs.db
+
+# Env files
+.env
+.env.*
+
+# Coverage
+coverage/
+
+# TypeScript
+*.tsbuildinfo
+
+# Misc
+*.local
+*.log
+*.lock
+
+# Optional: ignore test snapshots
+__snapshots__/
