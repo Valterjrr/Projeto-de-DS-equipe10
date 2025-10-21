@@ -1,25 +1,30 @@
 import { useState } from "react";
 import { motion } from "motion/react";
+import { renderToString } from "react-dom/server";
 import { ArrowLeft, Download, Eye } from "lucide-react";
 import { Button } from "./ui/button";
 import { Card } from "./ui/card";
 import { Dialog, DialogContent, DialogHeader, DialogTitle } from "./ui/dialog";
 import { LogoMain } from "./Logo";
+import type { CVResponse } from "../types/resume";
+import { styleMap, type TemplateStyle } from "./styles/cvStyles";
+import { CvPreview } from "./CvPreview";
+import { TemplatePreview } from "./TemplatePreview";
 
 interface Template {
   id: number;
   name: string;
   description: string;
-  style: "modern" | "classic" | "minimal" | "creative";
+  style: TemplateStyle;
   preview: string;
 }
-
-import type { CVResponse } from "../types/resume";
 
 interface TemplatesPageProps {
   onBack: () => void;
   analysis: CVResponse | null;
 }
+
+
 
 export function TemplatesPage({ onBack, analysis }: TemplatesPageProps) {
   const [selectedTemplate, setSelectedTemplate] = useState<Template | null>(null);
@@ -63,7 +68,63 @@ export function TemplatesPage({ onBack, analysis }: TemplatesPageProps) {
   };
 
   const handleDownload = (template: Template) => {
-    alert(`Gerando currículo no template: ${template.name}`);
+    if (!cv) {
+      alert('Nenhum currículo gerado disponível para download.');
+      return;
+    }
+
+    // Create a new div element to hold the preview
+    const container = document.createElement('div');
+    container.style.width = '900px';
+    container.style.margin = '24px auto';
+    container.style.backgroundColor = '#ffffff';
+    container.style.boxShadow = '0 0 10px rgba(0, 0, 0, 0.1)';
+
+    // Create a React root and render the CvPreview component
+    const root = document.createElement('div');
+    root.innerHTML = renderToString(
+      <CvPreview
+        cv={cv}
+        style={template.style}
+        scale={1}
+      />
+    );
+    container.appendChild(root);
+
+    // Create the HTML document for printing
+    const html = `
+      <!doctype html>
+      <html>
+        <head>
+          <meta charset="utf-8" />
+          <title>${template.name} - Currículo</title>
+          <style>
+            body { margin: 0; padding: 24px; background: #f5f5f5; }
+            @media print {
+              body { margin: 0; padding: 0; background: none; }
+              .cv-preview { box-shadow: none !important; }
+            }
+          </style>
+        </head>
+        <body>
+          ${container.outerHTML}
+        </body>
+      </html>
+    `;
+
+    const win = window.open('', '_blank');
+    if (!win) {
+      alert('Não foi possível abrir nova janela para download.');
+      return;
+    }
+    win.document.open();
+    win.document.write(html);
+    win.document.close();
+
+    // Automatically open print dialog
+    setTimeout(() => {
+      win.print();
+    }, 500);
   };
 
   return (
@@ -113,12 +174,13 @@ export function TemplatesPage({ onBack, analysis }: TemplatesPageProps) {
             >
               <Card className="overflow-hidden hover:shadow-2xl transition-shadow duration-300">
                 <div 
-                  className="h-64 flex items-center justify-center relative overflow-hidden"
-                  style={{ backgroundColor: getTemplateColor(template.style) }}
+                  className="h-64 flex items-center justify-center relative overflow-hidden bg-white"
                 >
-                  <div className="absolute inset-0 flex items-center justify-center">
-                    {renderTemplatePreview(template.style)}
-                  </div>
+                  <div className="absolute inset-0 flex items-center justify-center p-4">
+                      <div className="transform scale-[0.2] origin-center">
+                        <TemplatePreview style={template.style} />
+                      </div>
+                    </div>
                 </div>
                 <div className="p-6">
                   <h3 className="text-2xl mb-2" style={{ color: '#1F192F' }}>
@@ -133,6 +195,7 @@ export function TemplatesPage({ onBack, analysis }: TemplatesPageProps) {
                       variant="outline"
                       className="flex-1"
                       style={{ borderColor: '#65B8A6', color: '#2D6073' }}
+                      disabled={!cv}
                     >
                       <Eye className="w-4 h-4 mr-2" />
                       Visualizar
@@ -141,6 +204,7 @@ export function TemplatesPage({ onBack, analysis }: TemplatesPageProps) {
                       onClick={() => handleDownload(template)}
                       className="flex-1"
                       style={{ backgroundColor: '#2D6073', color: '#F0F7DA' }}
+                      disabled={!cv}
                     >
                       <Download className="w-4 h-4 mr-2" />
                       Usar Template
@@ -172,265 +236,24 @@ export function TemplatesPage({ onBack, analysis }: TemplatesPageProps) {
       <Dialog open={previewOpen} onOpenChange={setPreviewOpen}>
         <DialogContent className="max-w-4xl max-h-[90vh] overflow-y-auto">
           <DialogHeader>
-            <DialogTitle style={{ color: '#2D6073' }}>
-              {selectedTemplate?.name}
-            </DialogTitle>
+            <DialogTitle>{selectedTemplate?.name}</DialogTitle>
           </DialogHeader>
-          <div className="py-6">
-            {selectedTemplate && (
-              <div 
-                className="min-h-[600px] rounded-lg p-8"
-                style={{ backgroundColor: getTemplateColor(selectedTemplate.style) }}
-              >
-                <DynamicTemplatePreview style={selectedTemplate.style} cv={cv} />
+          <div className="p-6">
+            {cv && selectedTemplate ? (
+              <div className="transform scale-[0.8] origin-center">
+                <CvPreview
+                  cv={cv}
+                  style={selectedTemplate.style}
+                />
+              </div>
+            ) : (
+              <div className="text-center text-gray-500">
+                Nenhum currículo gerado disponível para visualização.
               </div>
             )}
           </div>
-          <div className="flex gap-3 justify-end">
-            <Button
-              onClick={() => setPreviewOpen(false)}
-              variant="outline"
-              style={{ borderColor: '#65B8A6', color: '#2D6073' }}
-            >
-              Fechar
-            </Button>
-            <Button
-              onClick={() => selectedTemplate && handleDownload(selectedTemplate)}
-              style={{ backgroundColor: '#2D6073', color: '#F0F7DA' }}
-            >
-              <Download className="w-4 h-4 mr-2" />
-              Usar Este Template
-            </Button>
-          </div>
         </DialogContent>
       </Dialog>
-    </div>
-  );
-}
-
-function getTemplateColor(style: string): string {
-  const colors: Record<string, string> = {
-    modern: '#2D6073',
-    classic: '#1F192F',
-    minimal: '#FFFFFF',
-    creative: '#65B8A6'
-  };
-  return colors[style] || '#FFFFFF';
-}
-
-function renderTemplatePreview(style: string) {
-  const baseStyle = { borderRadius: '8px' };
-  
-  switch (style) {
-    case 'modern':
-      return (
-        <div className="w-48 h-56 bg-white p-4 shadow-xl" style={baseStyle}>
-          <div className="h-3 w-32 mb-2" style={{ backgroundColor: '#65B8A6' }} />
-          <div className="h-2 w-24 mb-4" style={{ backgroundColor: '#B5E8C3' }} />
-          <div className="space-y-2">
-            <div className="h-2 w-full" style={{ backgroundColor: '#F0F7DA' }} />
-            <div className="h-2 w-full" style={{ backgroundColor: '#F0F7DA' }} />
-            <div className="h-2 w-3/4" style={{ backgroundColor: '#F0F7DA' }} />
-          </div>
-        </div>
-      );
-    case 'classic':
-      return (
-        <div className="w-48 h-56 bg-white p-4 shadow-xl" style={baseStyle}>
-          <div className="text-center mb-4">
-            <div className="h-3 w-32 mx-auto mb-1" style={{ backgroundColor: '#1F192F' }} />
-            <div className="h-2 w-24 mx-auto" style={{ backgroundColor: '#2D6073' }} />
-          </div>
-          <div className="space-y-1">
-            <div className="h-1 w-full" style={{ backgroundColor: '#B5E8C3' }} />
-            <div className="h-1 w-full" style={{ backgroundColor: '#B5E8C3' }} />
-            <div className="h-1 w-full" style={{ backgroundColor: '#B5E8C3' }} />
-          </div>
-        </div>
-      );
-    case 'minimal':
-      return (
-        <div className="w-48 h-56 bg-white p-4 shadow-xl border" style={{ ...baseStyle, borderColor: '#2D6073' }}>
-          <div className="h-2 w-28 mb-3" style={{ backgroundColor: '#2D6073' }} />
-          <div className="space-y-3">
-            <div className="h-1 w-full" style={{ backgroundColor: '#65B8A6' }} />
-            <div className="h-1 w-full" style={{ backgroundColor: '#65B8A6' }} />
-            <div className="h-1 w-2/3" style={{ backgroundColor: '#65B8A6' }} />
-          </div>
-        </div>
-      );
-    case 'creative':
-      return (
-        <div className="w-48 h-56 bg-white p-4 shadow-xl relative overflow-hidden" style={baseStyle}>
-          <div className="absolute top-0 right-0 w-24 h-24 rounded-full" style={{ backgroundColor: '#B5E8C3', opacity: 0.5 }} />
-          <div className="relative">
-            <div className="h-4 w-28 mb-2" style={{ backgroundColor: '#2D6073' }} />
-            <div className="h-2 w-20 mb-4" style={{ backgroundColor: '#65B8A6' }} />
-            <div className="space-y-2">
-              <div className="h-2 w-full" style={{ backgroundColor: '#F0F7DA' }} />
-              <div className="h-2 w-5/6" style={{ backgroundColor: '#F0F7DA' }} />
-            </div>
-          </div>
-        </div>
-      );
-    default:
-      return null;
-  }
-}
-
-function renderTemplateFullPreview(style: string) {
-  return (
-    <div className="bg-white p-12 shadow-2xl rounded-lg">
-      <div className="max-w-3xl mx-auto">
-        <h2 className="text-3xl mb-2" style={{ color: '#1F192F' }}>João Silva</h2>
-        <p className="text-xl mb-6" style={{ color: '#2D6073' }}>Desenvolvedor Full Stack</p>
-        
-        <div className="mb-8">
-          <h3 className="text-xl mb-3 pb-2 border-b-2" style={{ color: '#2D6073', borderColor: '#65B8A6' }}>
-            Sobre Mim
-          </h3>
-          <p style={{ color: '#1F192F' }}>
-            Desenvolvedor com 5 anos de experiência em desenvolvimento web, 
-            especializado em React, Node.js e arquitetura de microsserviços.
-          </p>
-        </div>
-
-        <div className="mb-8">
-          <h3 className="text-xl mb-3 pb-2 border-b-2" style={{ color: '#2D6073', borderColor: '#65B8A6' }}>
-            Experiência Profissional
-          </h3>
-          <div className="space-y-4">
-            <div>
-              <h4 className="font-semibold" style={{ color: '#1F192F' }}>Desenvolvedor Sênior - Tech Company</h4>
-              <p className="text-sm mb-2" style={{ color: '#2D6073' }}>2021 - Presente</p>
-              <ul className="list-disc list-inside space-y-1" style={{ color: '#1F192F' }}>
-                <li>Desenvolvimento de aplicações React com TypeScript</li>
-                <li>Implementação de APIs RESTful com Node.js</li>
-                <li>Colaboração em equipe ágil com 8 desenvolvedores</li>
-              </ul>
-            </div>
-          </div>
-        </div>
-
-        <div className="mb-8">
-          <h3 className="text-xl mb-3 pb-2 border-b-2" style={{ color: '#2D6073', borderColor: '#65B8A6' }}>
-            Habilidades
-          </h3>
-          <div className="flex flex-wrap gap-2">
-            {['React', 'TypeScript', 'Node.js', 'MongoDB', 'Docker', 'AWS'].map((skill) => (
-              <span 
-                key={skill}
-                className="px-3 py-1 rounded-full"
-                style={{ backgroundColor: '#B5E8C3', color: '#1F192F' }}
-              >
-                {skill}
-              </span>
-            ))}
-          </div>
-        </div>
-      </div>
-    </div>
-  );
-}
-
-// Componente para renderizar o currículo dinâmico conforme o template
-function DynamicTemplatePreview({ style, cv }: { style: string; cv: any }) {
-  const colorMap: Record<string, { primary: string; accent: string; bg: string }> = {
-    modern: { primary: '#2D6073', accent: '#65B8A6', bg: '#F0F7DA' },
-    classic: { primary: '#1F192F', accent: '#2D6073', bg: '#FFFFFF' },
-    minimal: { primary: '#2D6073', accent: '#65B8A6', bg: '#FFFFFF' },
-    creative: { primary: '#65B8A6', accent: '#B5E8C3', bg: '#FFFFFF' },
-  };
-  const colors = colorMap[style] || colorMap.modern;
-  return (
-    <div className="bg-white p-12 shadow-2xl rounded-lg" style={{ backgroundColor: colors.bg }}>
-      <div className="max-w-3xl mx-auto">
-        <h2 className="text-3xl mb-2" style={{ color: colors.primary }}>{cv.personal_info.name}</h2>
-        <p className="text-xl mb-6" style={{ color: colors.accent }}>{cv.personal_info.title}</p>
-        <ul className="mb-6 space-y-1">
-          {cv.personal_info.email && <li><b>Email:</b> {cv.personal_info.email}</li>}
-          {cv.personal_info.phone && <li><b>Telefone:</b> {cv.personal_info.phone}</li>}
-        </ul>
-        <div className="mb-8">
-          <h3 className="text-xl mb-3 pb-2 border-b-2" style={{ color: colors.accent, borderColor: colors.accent }}>
-            Sobre Mim
-          </h3>
-          <p style={{ color: colors.primary }}>{cv.professional_summary}</p>
-        </div>
-        <div className="mb-8">
-          <h3 className="text-xl mb-3 pb-2 border-b-2" style={{ color: colors.accent, borderColor: colors.accent }}>
-            Experiência Profissional
-          </h3>
-          <div className="space-y-4">
-            {cv.experience_entries.length === 0 ? <p>Nenhuma experiência cadastrada.</p> : (
-              cv.experience_entries.map((exp: any, idx: number) => (
-                <div key={idx}>
-                  <h4 className="font-semibold" style={{ color: colors.primary }}>{exp.title} - {exp.company}</h4>
-                  <p className="text-sm mb-2" style={{ color: colors.accent }}>{exp.period}</p>
-                  <ul className="list-disc list-inside space-y-1" style={{ color: colors.primary }}>
-                    {exp.achievements.map((ach: string, i: number) => <li key={i}>{ach}</li>)}
-                  </ul>
-                </div>
-              ))
-            )}
-          </div>
-        </div>
-        <div className="mb-8">
-          <h3 className="text-xl mb-3 pb-2 border-b-2" style={{ color: colors.accent, borderColor: colors.accent }}>
-            Educação
-          </h3>
-          <div className="space-y-4">
-            {cv.education_entries.length === 0 ? <p>Nenhuma formação cadastrada.</p> : (
-              cv.education_entries.map((edu: any, idx: number) => (
-                <div key={idx}>
-                  <div className="font-semibold" style={{ color: colors.primary }}>{edu.degree} - {edu.institution}</div>
-                  <div className="text-sm" style={{ color: colors.accent }}>{edu.period}</div>
-                </div>
-              ))
-            )}
-          </div>
-        </div>
-        <div className="mb-8">
-          <h3 className="text-xl mb-3 pb-2 border-b-2" style={{ color: colors.accent, borderColor: colors.accent }}>
-            Habilidades
-          </h3>
-          <div className="flex flex-wrap gap-2">
-            {cv.skills.map((skill: string, idx: number) => (
-              <span key={idx} className="px-3 py-1 rounded-full" style={{ backgroundColor: colors.accent, color: colors.primary }}>{skill}</span>
-            ))}
-          </div>
-        </div>
-        {cv.certifications && cv.certifications.length > 0 && (
-          <div className="mb-8">
-            <h3 className="text-xl mb-3 pb-2 border-b-2" style={{ color: colors.accent, borderColor: colors.accent }}>
-              Certificações
-            </h3>
-            <ul className="list-disc list-inside" style={{ color: colors.primary }}>
-              {cv.certifications.map((cert: string, idx: number) => <li key={idx}>{cert}</li>)}
-            </ul>
-          </div>
-        )}
-        {cv.languages && cv.languages.length > 0 && (
-          <div className="mb-8">
-            <h3 className="text-xl mb-3 pb-2 border-b-2" style={{ color: colors.accent, borderColor: colors.accent }}>
-              Idiomas
-            </h3>
-            <ul className="list-disc list-inside" style={{ color: colors.primary }}>
-              {cv.languages.map((lang: any, idx: number) => <li key={idx}>{lang.name} - {lang.level}</li>)}
-            </ul>
-          </div>
-        )}
-        {cv.achievements && cv.achievements.length > 0 && (
-          <div className="mb-8">
-            <h3 className="text-xl mb-3 pb-2 border-b-2" style={{ color: colors.accent, borderColor: colors.accent }}>
-              Conquistas
-            </h3>
-            <ul className="list-disc list-inside" style={{ color: colors.primary }}>
-              {cv.achievements.map((ach: string, idx: number) => <li key={idx}>{ach}</li>)}
-            </ul>
-          </div>
-        )}
-      </div>
     </div>
   );
 }
