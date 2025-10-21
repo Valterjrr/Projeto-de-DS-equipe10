@@ -6,16 +6,19 @@ import { Textarea } from "./ui/textarea";
 import { Button } from "./ui/button";
 import { PdfUploader } from "./PdfUploader";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "./ui/tabs";
+import { useResumeApi } from "../hooks/useResume";
+import type { CVRequest, CVResponse } from "../types/resume";
+import { toast } from "sonner";
 
 interface InputPageProps {
   onBack: () => void;
-  onAnalyze: (jobDescription: string, resumeText: string) => void;
+  onAnalyzeComplete: (result: CVResponse) => void;
 }
 
 type Step = "choice" | "from-scratch" | "improve-existing";
 type FromScratchStep = "job-choice" | "job-input" | "personal" | "experience" | "skills" | "education";
 
-export function InputPage({ onBack, onAnalyze }: InputPageProps) {
+export function InputPage({ onBack, onAnalyzeComplete }: InputPageProps) {
   const [step, setStep] = useState<Step>("choice");
   const [fromScratchStep, setFromScratchStep] = useState<FromScratchStep>("job-choice");
   const [isGenericResume, setIsGenericResume] = useState(false);
@@ -29,8 +32,9 @@ export function InputPage({ onBack, onAnalyze }: InputPageProps) {
   // Improve existing data
   const [resumeText, setResumeText] = useState("");
   const [jobDescription, setJobDescription] = useState("");
+  const { analyze, loading } = useResumeApi();
 
-  const handleFromScratchComplete = () => {
+  const handleFromScratchComplete = async () => {
     // Build resume text from collected data
     const builtResume = `
 Nome: ${personalInfo.name}
@@ -47,12 +51,41 @@ ${skills}
 EDUCAÇÃO:
 ${education}
     `.trim();
-    
-    onAnalyze(isGenericResume ? "" : jobDescription, builtResume);
+    try {
+      const payload: CVRequest = {
+        full_name: personalInfo.name,
+        desired_role: personalInfo.title,
+        email: personalInfo.email,
+        phone: personalInfo.phone,
+        professional_experience: experience,
+        education: education,
+        skills: skills,
+        target_job_description: isGenericResume ? null : jobDescription,
+      };
+      const res = await analyze(payload);
+      if (res) onAnalyzeComplete(res);
+    } catch (e: any) {
+      toast.error(e?.message || "Falha ao gerar currículo");
+    }
   };
 
-  const handleImproveExisting = () => {
-    onAnalyze(jobDescription, resumeText);
+  const handleImproveExisting = async () => {
+    try {
+      const payload: CVRequest = {
+        full_name: personalInfo.name || "",
+        desired_role: personalInfo.title || "",
+        email: personalInfo.email || undefined,
+        phone: personalInfo.phone || undefined,
+        professional_experience: resumeText,
+        education: education || "",
+        skills: skills || "",
+        target_job_description: jobDescription,
+      };
+      const res = await analyze(payload);
+      if (res) onAnalyzeComplete(res);
+    } catch (e: any) {
+      toast.error(e?.message || "Falha ao analisar currículo");
+    }
   };
 
   const getStepProgress = () => {
@@ -328,7 +361,7 @@ ${education}
               <div className="flex justify-end mt-6">
                 <Button
                   onClick={() => setFromScratchStep("personal")}
-                  disabled={!jobDescription.trim()}
+                  disabled={!isGenericResume && !jobDescription.trim()}
                   style={{ backgroundColor: '#2D6073', color: '#F0F7DA' }}
                 >
                   Próximo
@@ -500,9 +533,10 @@ ${education}
                 </Button>
                 <Button
                   onClick={handleFromScratchComplete}
-                  style={{ backgroundColor: '#2D6073', color: '#F0F7DA' }}
+                  disabled={loading}
+                  style={{ backgroundColor: '#2D6073', color: '#F0F7DA', opacity: loading ? 0.8 : 1 }}
                 >
-                  {isGenericResume ? "Gerar Currículo" : "Analisar Currículo"}
+                  {loading ? "Processando..." : isGenericResume ? "Gerar Currículo" : "Analisar Currículo"}
                 </Button>
               </div>
             </motion.div>
@@ -646,7 +680,7 @@ ${education}
           >
             <Button
               onClick={handleImproveExisting}
-              disabled={!jobDescription.trim() || !resumeText.trim()}
+              disabled={!jobDescription.trim() || !resumeText.trim() || loading}
               className="px-12 py-6 text-lg rounded-xl transition-all duration-300 hover:scale-105 disabled:opacity-50 disabled:cursor-not-allowed"
               style={{
                 backgroundColor: jobDescription.trim() && resumeText.trim() ? '#2D6073' : '#B5E8C3',
@@ -654,7 +688,7 @@ ${education}
               }}
             >
               <Sparkles className="w-5 h-5 mr-2" />
-              Analisar Compatibilidade
+              {loading ? "Processando..." : "Analisar Compatibilidade"}
             </Button>
           </motion.div>
         </div>

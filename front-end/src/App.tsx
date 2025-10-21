@@ -3,17 +3,16 @@ import { HomePage } from "./components/HomePage";
 import { InputPage } from "./components/InputPage";
 import { ResultsPage } from "./components/ResultsPage";
 import { TemplatesPage } from "./components/TemplatesPage";
+import type { CVResponse } from "./types/resume";
 
 type Page = "home" | "input" | "results" | "templates";
 
 export default function App() {
   const [currentPage, setCurrentPage] = useState<Page>("home");
-  const [jobDescription, setJobDescription] = useState("");
-  const [resumeText, setResumeText] = useState("");
+  const [analysis, setAnalysis] = useState<CVResponse | null>(null);
 
-  const handleAnalyze = (job: string, resume: string) => {
-    setJobDescription(job);
-    setResumeText(resume);
+  const handleAnalyzeComplete = (result: CVResponse) => {
+    setAnalysis(result);
     setCurrentPage("results");
   };
 
@@ -23,22 +22,15 @@ export default function App() {
         <HomePage onStart={() => setCurrentPage("input")} />
       )}
       {currentPage === "input" && (
-        <InputPage 
-          onBack={() => setCurrentPage("home")}
-          onAnalyze={handleAnalyze}
-        />
+        <InputPage onBack={() => setCurrentPage("home")} onAnalyzeComplete={handleAnalyzeComplete} />
       )}
       {currentPage === "results" && (
-        <ResultsPage 
-          onBack={() => setCurrentPage("input")}
-          onViewTemplates={() => setCurrentPage("templates")}
-          jobDescription={jobDescription}
-          resumeText={resumeText}
-        />
+        <ResultsPage onBack={() => setCurrentPage("input")} onViewTemplates={() => setCurrentPage("templates")} analysis={analysis} />
       )}
       {currentPage === "templates" && (
         <TemplatesPage 
           onBack={() => setCurrentPage("results")}
+          analysis={analysis}
         />
       )}
     </div>

@@ -14,13 +14,17 @@ interface Template {
   preview: string;
 }
 
+import type { CVResponse } from "../types/resume";
+
 interface TemplatesPageProps {
   onBack: () => void;
+  analysis: CVResponse | null;
 }
 
-export function TemplatesPage({ onBack }: TemplatesPageProps) {
+export function TemplatesPage({ onBack, analysis }: TemplatesPageProps) {
   const [selectedTemplate, setSelectedTemplate] = useState<Template | null>(null);
   const [previewOpen, setPreviewOpen] = useState(false);
+  const cv = analysis?.generated_cv;
 
   const templates: Template[] = [
     {
@@ -178,7 +182,7 @@ export function TemplatesPage({ onBack }: TemplatesPageProps) {
                 className="min-h-[600px] rounded-lg p-8"
                 style={{ backgroundColor: getTemplateColor(selectedTemplate.style) }}
               >
-                {renderTemplateFullPreview(selectedTemplate.style)}
+                <DynamicTemplatePreview style={selectedTemplate.style} cv={cv} />
               </div>
             )}
           </div>
@@ -324,6 +328,108 @@ function renderTemplateFullPreview(style: string) {
             ))}
           </div>
         </div>
+      </div>
+    </div>
+  );
+}
+
+// Componente para renderizar o currículo dinâmico conforme o template
+function DynamicTemplatePreview({ style, cv }: { style: string; cv: any }) {
+  const colorMap: Record<string, { primary: string; accent: string; bg: string }> = {
+    modern: { primary: '#2D6073', accent: '#65B8A6', bg: '#F0F7DA' },
+    classic: { primary: '#1F192F', accent: '#2D6073', bg: '#FFFFFF' },
+    minimal: { primary: '#2D6073', accent: '#65B8A6', bg: '#FFFFFF' },
+    creative: { primary: '#65B8A6', accent: '#B5E8C3', bg: '#FFFFFF' },
+  };
+  const colors = colorMap[style] || colorMap.modern;
+  return (
+    <div className="bg-white p-12 shadow-2xl rounded-lg" style={{ backgroundColor: colors.bg }}>
+      <div className="max-w-3xl mx-auto">
+        <h2 className="text-3xl mb-2" style={{ color: colors.primary }}>{cv.personal_info.name}</h2>
+        <p className="text-xl mb-6" style={{ color: colors.accent }}>{cv.personal_info.title}</p>
+        <ul className="mb-6 space-y-1">
+          {cv.personal_info.email && <li><b>Email:</b> {cv.personal_info.email}</li>}
+          {cv.personal_info.phone && <li><b>Telefone:</b> {cv.personal_info.phone}</li>}
+        </ul>
+        <div className="mb-8">
+          <h3 className="text-xl mb-3 pb-2 border-b-2" style={{ color: colors.accent, borderColor: colors.accent }}>
+            Sobre Mim
+          </h3>
+          <p style={{ color: colors.primary }}>{cv.professional_summary}</p>
+        </div>
+        <div className="mb-8">
+          <h3 className="text-xl mb-3 pb-2 border-b-2" style={{ color: colors.accent, borderColor: colors.accent }}>
+            Experiência Profissional
+          </h3>
+          <div className="space-y-4">
+            {cv.experience_entries.length === 0 ? <p>Nenhuma experiência cadastrada.</p> : (
+              cv.experience_entries.map((exp: any, idx: number) => (
+                <div key={idx}>
+                  <h4 className="font-semibold" style={{ color: colors.primary }}>{exp.title} - {exp.company}</h4>
+                  <p className="text-sm mb-2" style={{ color: colors.accent }}>{exp.period}</p>
+                  <ul className="list-disc list-inside space-y-1" style={{ color: colors.primary }}>
+                    {exp.achievements.map((ach: string, i: number) => <li key={i}>{ach}</li>)}
+                  </ul>
+                </div>
+              ))
+            )}
+          </div>
+        </div>
+        <div className="mb-8">
+          <h3 className="text-xl mb-3 pb-2 border-b-2" style={{ color: colors.accent, borderColor: colors.accent }}>
+            Educação
+          </h3>
+          <div className="space-y-4">
+            {cv.education_entries.length === 0 ? <p>Nenhuma formação cadastrada.</p> : (
+              cv.education_entries.map((edu: any, idx: number) => (
+                <div key={idx}>
+                  <div className="font-semibold" style={{ color: colors.primary }}>{edu.degree} - {edu.institution}</div>
+                  <div className="text-sm" style={{ color: colors.accent }}>{edu.period}</div>
+                </div>
+              ))
+            )}
+          </div>
+        </div>
+        <div className="mb-8">
+          <h3 className="text-xl mb-3 pb-2 border-b-2" style={{ color: colors.accent, borderColor: colors.accent }}>
+            Habilidades
+          </h3>
+          <div className="flex flex-wrap gap-2">
+            {cv.skills.map((skill: string, idx: number) => (
+              <span key={idx} className="px-3 py-1 rounded-full" style={{ backgroundColor: colors.accent, color: colors.primary }}>{skill}</span>
+            ))}
+          </div>
+        </div>
+        {cv.certifications && cv.certifications.length > 0 && (
+          <div className="mb-8">
+            <h3 className="text-xl mb-3 pb-2 border-b-2" style={{ color: colors.accent, borderColor: colors.accent }}>
+              Certificações
+            </h3>
+            <ul className="list-disc list-inside" style={{ color: colors.primary }}>
+              {cv.certifications.map((cert: string, idx: number) => <li key={idx}>{cert}</li>)}
+            </ul>
+          </div>
+        )}
+        {cv.languages && cv.languages.length > 0 && (
+          <div className="mb-8">
+            <h3 className="text-xl mb-3 pb-2 border-b-2" style={{ color: colors.accent, borderColor: colors.accent }}>
+              Idiomas
+            </h3>
+            <ul className="list-disc list-inside" style={{ color: colors.primary }}>
+              {cv.languages.map((lang: any, idx: number) => <li key={idx}>{lang.name} - {lang.level}</li>)}
+            </ul>
+          </div>
+        )}
+        {cv.achievements && cv.achievements.length > 0 && (
+          <div className="mb-8">
+            <h3 className="text-xl mb-3 pb-2 border-b-2" style={{ color: colors.accent, borderColor: colors.accent }}>
+              Conquistas
+            </h3>
+            <ul className="list-disc list-inside" style={{ color: colors.primary }}>
+              {cv.achievements.map((ach: string, idx: number) => <li key={idx}>{ach}</li>)}
+            </ul>
+          </div>
+        )}
       </div>
     </div>
   );
