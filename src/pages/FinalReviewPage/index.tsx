@@ -1,14 +1,13 @@
-import React, { useState } from 'react'
+import React, { useState, useRef } from 'react'
 import { useLocation } from 'react-router-dom'
 import PageCardLayout from '@/shared_components/PageCardLayout/PageCardLayout'
 import type { CVResponse, GeneratedCV } from '@/types/resume'
 import './FinalReviewPage.css'
 import { shortName } from '@/utils/formatters'
-// NOVO: Importar editores modulares
+import html2pdf from 'html2pdf.js'
 import SummaryEditor from './components/SectionEditors/Summary/SummaryEditor'
 import ExperienceListEditor from './components/SectionEditors/Experience/ExperienceListEditor'
 import EducationListEditor from './components/SectionEditors/Education/EducationListEditor'
-// NOVO: Importar editores de campos simples e preview
 import PersonalInfoEditor from './components/SectionEditors/PersonalInfo/PersonalInfoEditor'
 import SkillsEditor from './components/SectionEditors/Skills/SkillsEditor'
 import CertificationsEditor from './components/SectionEditors/Certifications/CertificationsEditor'
@@ -127,6 +126,8 @@ const FinalReviewPage: React.FC = () => {
     
   // Inicialização do estado editável
   const { editableCV, updateCV } = useEditableCV(reviewData?.generated_cv || null);
+  // Ref para o elemento que será convertido em PDF
+  const printRef = useRef<HTMLDivElement>(null)
 
   // Estado para alternar entre as abas (Edição/Preview) e as seções de edição
   const [activeView, setActiveView] = useState<'editor' | 'preview'>('editor');
@@ -148,9 +149,22 @@ const FinalReviewPage: React.FC = () => {
     
 
   const handleDownloadPDF = () => {
-    // Implementar lógica real de download de PDF usando os dados de 'editableCV'
-    if (!editableCV) return
-    alert(`Gerando PDF de ${shortName(editableCV.personal_info.name)} com as edições!`);
+    // Implementar lógica real de download de PDF usando os dados de 'editableCV' e o elemento referenciado
+    if (!editableCV || !printRef.current) return
+
+    const rawName = editableCV.personal_info?.name || 'Curriculo'
+    const fileName = `${rawName.replace(/\s+/g, '_')}_Curriculo.pdf`
+
+    const opt = {
+      margin: 10,
+      filename: fileName,
+      image: { type: 'jpeg', quality: 0.98 },
+      html2canvas: { scale: 2, useCORS: true },
+      jsPDF: { unit: 'mm', format: 'a4', orientation: 'portrait' }
+    }
+
+    // html2pdf pode não ter definições TS; forçamos any para chamar
+    ;(html2pdf as any)().set(opt).from(printRef.current).save()
   }
 
     
@@ -179,7 +193,9 @@ const FinalReviewPage: React.FC = () => {
           {/* Painel de Preview (Direita, na prática) */}
           <div className={`preview-panel ${activeView === 'preview' ? 'active' : ''}`}>
             {/* NOVO: Visualização formatada do CV */}
-            <CVPreview cv={editableCV} />
+            <div ref={printRef} style={{ width: '100%' }}>
+              <CVPreview cv={editableCV} />
+            </div>
           </div>
         </div>
 
