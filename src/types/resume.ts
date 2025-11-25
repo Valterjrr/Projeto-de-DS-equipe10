@@ -12,6 +12,7 @@ export interface CVRequest {
   professional_experience: string;
   education: string;
   skills: string;
+  projects?: string;
   target_job_description?: string | null;
 }
 
@@ -58,6 +59,13 @@ export interface ExperienceEntry {
   achievements: string[];
 }
 
+export interface ProjectEntry {
+  name: string;
+  description: string;
+  technologies: string[];
+  link?: string | null;
+}
+
 export interface EducationEntry {
   degree: string;
   institution: string;
@@ -73,6 +81,7 @@ export interface GeneratedCV {
   personal_info: PersonalInfo;
   professional_summary: string;
   experience_entries: ExperienceEntry[];
+  project_entries?: ProjectEntry[] | null;
   education_entries: EducationEntry[];
   skills: string[];
   achievements?: string[] | null;
