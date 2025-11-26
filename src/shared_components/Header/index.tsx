@@ -1,43 +1,38 @@
 import React from 'react'
 import './Header.css'
-import Title from '@/shared_components/Title'
+// REMOVIDO: import Title...
+// NOVO: Importamos a Logo
+import Logo from '@/shared_components/Logo/Logo' 
 import BackButton from '@/shared_components/BackButton/BackButton'
-// NOVO: Importar useLocation para verificar a rota
 import { useLocation } from 'react-router-dom'
 
 const Header: React.FC = () => {
-  // NOVO: Obter a localização atual e o hook de navegação
   const location = useLocation()
   
-  // Condição CORRIGIDA: Exibir o BackButton se a rota NÃO for a HomePage ('/')
+  // Define se estamos no fluxo de criação (não na home)
   const isStartFlow = location.pathname !== '/'
-  // A página atual deve usar o Header adaptado (fundo claro, estático)
-  const isAdaptedPage = location.pathname === '/start' || location.pathname === '/new-cv' // Incluir a nova rota
+  // Páginas que precisam do header com fundo claro
+  const isAdaptedPage = location.pathname === '/start' || location.pathname === '/new-cv' 
 
-  // Determinar o conteúdo da seção 'brand' (depende da rota)
   let brandContent;
 
   if (isStartFlow) {
-    // Na rota do fluxo, mostra o BackButton à esquerda
-    brandContent = <BackButton /> // Não precisa do 'to', pois o padrão é navigate(-1)
+    // Nas páginas internas, mostramos o botão voltar na esquerda
+    brandContent = <BackButton /> 
   } else {
-    // Na HomePage ('/'): NÃO MOSTRAR NADA no local do Logo para evitar redundância.
     brandContent = <></>
   }
 
   return (
-    // AJUSTE: Aplicar a classe de adaptação se estiver em qualquer página do fluxo de início
-    <header className={`site-header ${isAdaptedPage ? 'is-start-page' : ''}`}>
+    <header className={`site-header ${isAdaptedPage ? 'is-start-page' : ''} ${!isStartFlow ? 'is-homepage' : ''}`}>
       <div className="header-inner">
-        {/* Exibir botão Voltar ou Logo, dependendo da rota */}
         <div className="brand">
           {brandContent} 
         </div>
         
-        {/* Logo AiD sempre à direita nas páginas de fluxo, ou botões na HomePage */}
         <nav className="nav">
-          {isStartFlow && <Title small />} 
-          {!isStartFlow && <>{/* ... botões de autenticação da HomePage ... */}</>}
+          {/* Se não for a home, mostra a Logo pequena na direita */}
+          {isStartFlow && <Logo size="small" />} 
         </nav>
       </div>
     </header>

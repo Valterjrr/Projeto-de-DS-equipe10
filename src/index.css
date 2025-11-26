@@ -1,78 +1,63 @@
-@import url('https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;600;700&family=Questrial&display=swap');
+/* 1. Importando as fontes */
+@import url('https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;700&family=Questrial&display=swap');
 
-:root{
-  /* Light mode palette (provided)
-     primary: #1f192f (dark text), #2d6073 (primary), #65b8a6 (accent)
-     supporting: #B5E8C3, #F0F7DA
-  */
-  --bg: #F0F7DA; /* page background - very light green */
-  --fg: #1f192f; /* primary text / foreground */
-  --primary: #2d6073; /* brand primary */
-  --accent: #65b8a6; /* secondary accent */
-  --accent-light: #B5E8C3; /* light accent surface */
-  --resources-bg: #F0F7DA; /* same as bg for consistency */
-  --text-dark: #1f192f;
-  --navy: #2d6073; /* reuse primary for hero/navy */
-}
-html,body,#root{height:100%;}
-body{
-  margin:0;
-  font-family: 'JetBrains Mono', Questrial, 'Helvetica World', system-ui, -apple-system, 'Segoe UI', Roboto, 'Helvetica Neue', Arial;
-  background:var(--bg);
-  color:var(--fg);
-}
+/* Helvetica World geralmente é uma fonte de sistema ou paga, vamos usar Helvetica padrão como fallback */
 
-/* Ajuste em main para acomodar Header e Router corretamente */
-.app-main-layout, main{
-  /* Garante que o main ocupe a altura total do corpo */
-  min-height: 100vh; 
+:root {
+  /* === PALETA OFICIAL (Light Mode) === */
   
-  /* NOVO: Mudar o background PADRÃO para o CLARO */
-  background: var(--resources-bg);
+  /* Cores Base */
+  --color-dark: #1F192F;      /* Texto Principal / Elementos Escuros */
+  --color-teal: #2D6073;      /* Hero Background / Botões Primários */
+  --color-mint: #65B8A6;      /* Acentos / Ícone do Check */
+  --color-light-green: #B5E8C3; /* Detalhes secundários */
+  --color-cream: #F0F7DA;     /* Fundo da Aplicação (Light Mode) */
 
-  /* Layout Flexbox: Header (fixo) + Conteúdo (restante) */
-  display: flex; 
-  flex-direction: column; 
-  align-items: stretch;
-  /* Transição suave de background para evitar flash entre rotas */
-  transition: background-color 240ms ease;
+  /* === MAPEAMENTO SEMÂNTICO === */
+  /* Aqui dizemos "onde" cada cor será usada */
+
+  /* Fundos */
+  --bg-app: var(--color-cream);       /* O fundo geral do site */
+  --bg-hero: var(--color-teal);       /* O fundo da seção inicial (Hero) */
+  --bg-card: #ffffff;                 /* Fundo branco para cartões (contraste com o creme) */
+
+  /* Textos */
+  --text-primary: var(--color-dark);  /* Cor padrão do texto (#1F192F) */
+  --text-inverted: var(--color-cream); /* Texto claro sobre fundos escuros */
+  --text-accent: var(--color-teal);    /* Texto colorido para destaques */
+
+  /* Marcas e Botões */
+  --brand-primary: var(--color-teal);
+  --brand-secondary: var(--color-mint);
+  
+  /* Fontes */
+  --font-logo: 'JetBrains Mono', monospace; /* Fonte da Logo e Títulos Técnicos */
+  --font-body: 'Questrial', sans-serif;     /* Fonte de leitura geral */
+  --font-fallback: 'Helvetica World', Helvetica, Arial, sans-serif;
+
+  /* Utilitários */
+  --border-radius: 12px;
 }
 
-/* O Router Wrapper deve ocupar o restante da altura e largura */
-.router-content-wrapper {
-  flex-grow: 1; 
-  position: relative; /* CRUCIAL: Define o contexto de posicionamento ABSOLUTO para os filhos do Router */
+/* === RESET GLOBAL === */
+html, body, #root {
+  height: 100%;
   width: 100%;
-  overflow: hidden; /* Oculta o conteúdo animado que sai da tela */
+  margin: 0;
+  padding: 0;
 }
 
-/* Ajustar o wrapper de transição de rota */
-.page-transition-wrapper {
-  width: 100%;
-  height: 100%; 
-  /* Agora é ABSOLUTO ao .router-content-wrapper, e não ao body/html */
-  position: absolute; 
-  top: 0;
-  left: 0;
+body {
+  /* Aplicando a fonte Questrial como padrão para leitura */
+  font-family: var(--font-body), var(--font-fallback);
+  
+  background-color: var(--bg-app); /* #F0F7DA */
+  color: var(--text-primary);      /* #1F192F */
+  
+  -webkit-font-smoothing: antialiased;
 }
 
-/* Garantir que os elementos de página animados sejam transparentes por padrão
-   para deixar o background do main aparecer durante a transição. */
-.page-transition-wrapper > * {
-  background: transparent !important;
-}
-
-/* Também garantir que qualquer container de página (ex: .page) não force um
-   fundo branco durante a animação. Ajuste conforme suas classes de página. */
-.page, .page-inner {
-  background: transparent;
-}
-
-/* NOVO: Estilo para o fundo durante as transições de fluxo (StartPage, NewCVTypePage) */
-/* .app-main-layout.is-flow-page removed: default main background is now light */
-
-/* Corrigir o min-height para incluir o espaço do header global (que não é absoluto nesta página) */
-.page-card-layout-root {
-  min-height: calc(100vh - 40px); /* Ajustado para compensar o Header estático (aprox. 40px de altura) */
-  /* ... (Manter outros estilos) ... */
+/* Títulos e Botões com a fonte "Tech" */
+h1, h2, h3, button, .btn {
+  font-family: var(--font-logo);
 }

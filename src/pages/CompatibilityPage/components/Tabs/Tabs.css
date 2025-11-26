@@ -5,10 +5,12 @@
 .tabs-nav {
     display: flex;
     justify-content: center;
-    background: #E0E0E0; /* Fundo neutro para a barra */
-    border-radius: 8px;
+    /* Fundo cinza bem clarinho para a régua */
+    background-color: rgba(0, 0, 0, 0.05); 
+    border-radius: 12px;
     margin-bottom: 30px;
     padding: 4px;
+    gap: 4px;
 }
 
 .tab-item {
@@ -17,23 +19,35 @@
     padding: 10px 15px;
     border: none;
     background: transparent;
-    color: #666;
-    font-weight: 600;
+    
+    /* Fonte e Cor */
+    font-family: var(--font-logo); /* JetBrains Mono */
+    font-weight: 700;
+    font-size: 0.9rem;
+    color: var(--text-primary);
+    opacity: 0.6;
+    
     cursor: pointer;
-    border-radius: 6px;
-    transition: background-color 0.2s, color 0.2s;
+    border-radius: 8px;
+    transition: all 0.2s ease;
 }
 
+/* Aba Ativa */
 .tab-item.active {
-    background: var(--accent, #2dd4bf); /* Verde-água de destaque */
-    color: white;
-    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+    /* Fundo Teal, Texto Creme */
+    background-color: var(--brand-primary); 
+    color: var(--text-inverted);
+    
+    opacity: 1;
+    box-shadow: 0 2px 8px rgba(45, 96, 115, 0.2);
 }
 
 .tab-item:hover:not(.active) {
-    background: rgba(0, 0, 0, 0.05);
+    background-color: rgba(0, 0, 0, 0.05);
+    opacity: 0.8;
 }
 
 .tabs-content {
-    /* Pode ter um padding interno se necessário */
+    /* Espaço para o conteúdo respirar */
+    margin-top: 20px;
 }

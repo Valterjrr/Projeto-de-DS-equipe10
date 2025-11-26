@@ -3,37 +3,54 @@
     justify-content: space-between;
     margin-top: 40px;
     align-items: center;
+    gap: 16px; /* Espaço entre os botões */
 }
 
+/* Botão Principal (Próximo / Gerar) */
 .btn-primary {
-    background: var(--accent, #65b8a6);
-    color: var(--fg);
+    /* Identidade Visual: Teal */
+    background-color: var(--brand-primary);
+    color: var(--text-inverted); /* Texto Creme/Branco */
+    
+    /* Tipografia */
+    font-family: var(--font-logo); /* JetBrains Mono */
+    font-weight: 700;
+    font-size: 1rem;
+    
     border: none;
     padding: 12px 24px;
     border-radius: 8px;
-    font-weight: 700;
     cursor: pointer;
-    transition: opacity 0.2s, transform 0.2s;
+    transition: transform 0.1s ease, opacity 0.2s ease;
 }
+
 .btn-primary:hover { 
     opacity: 0.9; 
     transform: translateY(-1px); 
 }
+
 .btn-primary:disabled {
     opacity: 0.5;
     cursor: not-allowed;
     transform: none;
 }
 
-
+/* Botão Voltar */
 .btn-back {
-    background: var(--accent-light, #B5E8C3);
-    color: var(--text-dark, #1f192f);
-    border: 1px solid rgba(0,0,0,0.08);
+    background-color: transparent;
+    /* Borda sutil para delimitar */
+    border: 1px solid rgba(0,0,0,0.1); 
+    color: var(--text-primary);
+    
+    font-family: var(--font-body); /* Questrial */
+    font-weight: 600;
+    
     padding: 12px 24px;
     border-radius: 8px;
-    font-weight: 600;
     cursor: pointer;
     transition: background-color 0.2s;
 }
-.btn-back:hover { background: rgba(0,0,0,0.03); }
+
+.btn-back:hover { 
+    background-color: rgba(0,0,0,0.05); 
+}

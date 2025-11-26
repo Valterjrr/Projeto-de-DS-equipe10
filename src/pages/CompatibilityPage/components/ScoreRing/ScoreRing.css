@@ -1,7 +1,7 @@
 .score-ring-container {
     padding: 20px 0 40px 0;
     margin-bottom: 20px;
-    border-bottom: 1px solid #f0f0f0;
+    border-bottom: 1px solid rgba(0,0,0,0.05); /* Borda sutil */
     text-align: center;
 }
 
@@ -13,36 +13,42 @@
     display: flex;
     align-items: center;
     justify-content: center;
-    border: 8px solid var(--resources-bg);
-    box-shadow: 0 0 0 1px #ccc;
+    
+    /* Borda externa sutil para acabamento */
+    box-shadow: 0 0 0 4px rgba(45, 96, 115, 0.1); 
+    
+    /* Nota: O gradiente do anel é controlado inline no componente React (ScoreRing.tsx),
+       mas vamos garantir que o container esteja pronto. */
 }
 
 .score-text {
-    font-size: 36px;
+    font-family: var(--font-logo); /* JetBrains Mono para o número */
+    font-size: 42px;
     font-weight: 700;
-    color: var(--text-dark);
+    color: var(--brand-primary); /* Cor Teal para o número */
 }
 
 .compatibility-status {
+    font-family: var(--font-body);
     font-size: 18px;
-    font-weight: 500;
-    color: var(--text-dark);
-    margin: 6px 0 0;
+    font-weight: 600;
+    color: var(--text-primary);
+    margin: 12px 0 0;
 }
 
-/* Horizontal progress bar */
+/* Barra de progresso horizontal (se houver) */
 .score-bar-bg {
     width: 60%;
-    height: 10px;
-    background: #E0E0E0;
-    border-radius: 5px;
+    height: 8px;
+    background: rgba(45, 96, 115, 0.1);
+    border-radius: 10px;
     margin: 20px auto 0;
     overflow: hidden;
 }
 
 .score-bar-fill {
     height: 100%;
-    background: var(--navy);
-    border-radius: 5px;
-    transition: width 0.5s ease-out;
+    background-color: var(--brand-primary); /* Teal */
+    border-radius: 10px;
+    transition: width 0.8s cubic-bezier(0.4, 0, 0.2, 1);
 }
