@@ -8,7 +8,7 @@ import FinalReviewPage from '@/pages/FinalReviewPage' // NOVO: Página de Revis�
 import CompatibilityPage from '@/pages/CompatibilityPage' // Rota de Análise
 import { Routes, Route, useLocation } from 'react-router-dom'
 import { AnimatePresence, motion } from 'framer-motion'
-
+import OptimizeCVPage from '@/pages/OptimizeCVPage' //adicionada nova página pra otimizar curriculo pronto
 // NOVO: Componente que renderiza as rotas com a location para facilitar transições
 const Router = () => {
   const location = useLocation()
@@ -59,6 +59,8 @@ const Router = () => {
   <Route path="/final-review" element={<RouteWrapper key="final-review-page" component={FinalReviewPage} />} />
   {/* Rota de Análise (Critical Path para fluxo Otimizado) */}
   <Route path="/analysis" element={<RouteWrapper key="analysis-page" component={CompatibilityPage} />} />
+  {/* Rota do "Analise um Curriculo Pronto" */}
+  <Route path="/optimize-cv" element={<RouteWrapper key="optimize-cv-page" component={OptimizeCVPage} />} />        
       </Routes>
     </AnimatePresence>
   )

@@ -45,7 +45,7 @@
   bottom: 0; /* Coloca no fundo exato da área scrollável */
   z-index: 10;
     
-  background: #ffffff; /* Garante que o fundo branco cubra a área de scroll */
+  background: var(--bg);
   padding-top: 15px; 
   padding-bottom: 20px; /* Adiciona padding inferior */
   border-top: 1px solid #f0f0f0; 

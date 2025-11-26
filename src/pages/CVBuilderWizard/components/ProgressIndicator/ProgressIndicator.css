@@ -2,20 +2,28 @@
     display: flex;
     justify-content: space-between;
     margin-bottom: 30px;
-    padding: 0 5px; /* Adiciona um pequeno padding para o efeito visual */
+    padding: 0 5px;
+    gap: 10px; /* Espaçamento entre os traços */
 }
+
 .progress-bar .step {
     flex-grow: 1;
-    height: 8px;
-    background: #E0E0E0; /* Cinza claro */
-    margin-right: 10px;
+    height: 6px; /* Um pouco mais fino e elegante */
+    
+    /* Fundo inativo: Um cinza bem sutil ou o próprio teal com transparência */
+    background-color: rgba(45, 96, 115, 0.15); 
+    
     border-radius: 4px;
-    transition: background-color 0.3s;
+    transition: background-color 0.4s ease;
 }
+
 .progress-bar .step.active {
-    /* Cor de destaque (accent) deve ser herdada do contexto ou passada como variável */
-    background: var(--accent, #2dd4bf); 
+    /* AQUI: Usamos a cor da marca (Teal) para indicar passos completados */
+    background-color: var(--brand-primary); 
+    
+    /* Opcional: Se quiser o verde menta para brilhar mais, use var(--brand-secondary) */
 }
+
 .progress-bar .step:last-child {
     margin-right: 0;
 }

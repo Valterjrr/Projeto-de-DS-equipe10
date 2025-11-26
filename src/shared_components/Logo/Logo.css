@@ -1,0 +1,56 @@
+.brand-logo {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  font-family: var(--font-logo);
+  font-weight: 700;
+  user-select: none;
+  /* Garante que a cor do texto use a variável correta */
+  color: var(--text-primary); 
+}
+
+/* Wrapper para controlar o tamanho do SVG */
+.logo-svg-wrapper {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+/* O SVG deve preencher o wrapper */
+.logo-svg-wrapper svg {
+  width: 100%;
+  height: 100%;
+  /* O drop-shadow dá um destaque se o fundo for muito parecido */
+  filter: drop-shadow(0px 4px 4px rgba(0, 0, 0, 0.1));
+}
+
+/* === VARIAÇÃO GRANDE (Para a Home) === */
+.brand-logo.large {
+  flex-direction: column; /* Na home, o ícone fica em cima do texto? Se for ao lado, apague essa linha */
+  gap: 16px;
+}
+
+.brand-logo.large .logo-svg-wrapper {
+  width: 120px; /* Aumentei para dar destaque igual à imagem */
+  height: 120px;
+}
+
+.brand-logo.large .logo-text {
+  font-size: 64px; /* Fonte bem grande para o título */
+  line-height: 1;
+}
+
+/* === VARIAÇÃO PEQUENA (Para o Header) === */
+.brand-logo.small {
+  flex-direction: row;
+  gap: 8px;
+}
+
+.brand-logo.small .logo-svg-wrapper {
+  width: 40px;
+  height: 40px;
+}
+
+.brand-logo.small .logo-text {
+  font-size: 24px;
+}

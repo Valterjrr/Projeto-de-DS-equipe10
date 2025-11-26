@@ -1,7 +1,7 @@
 .site-header{
   /* Estilos Padrão (para fluxo: StartPage, NewCVTypePage - estático) */
   position: static; 
-  color: var(--text-dark, #0b1220); /* Alterado para a cor escura (melhor padrão) */
+  color: var(--text-dark, #1f192f); /* Alterado para a cor escura do tema */
   padding: 18px 0;
   width: 100%;
   z-index: 10;
@@ -16,7 +16,7 @@
 }
 .brand{font-weight:700;font-size:20px}
 .nav .btn{margin-left:12px;padding:8px 12px;border-radius:6px;border:none;cursor:pointer}
-.nav .btn.primary{background: var(--accent, #2dd4bf);color:#042027}
+.nav .btn.primary{background: var(--accent, #65b8a6); color: var(--fg);}
 .nav .btn.outline{background:transparent;border:1px solid rgba(255,255,255,0.18);color:#fff}
 
 /* NOVO: Estilos ESPECÍFICOS para a HomePage (Flutuante e Transparente) */

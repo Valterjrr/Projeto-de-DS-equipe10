@@ -1,15 +1,19 @@
 .form-step-content {
-    /* Herda alinhamento e largura de CVBuilderWizard.css */
-    padding-top: 20px;
+    padding-top: 10px;
 }
 
 .form-title {
-    /* Redefinir margem para ficar mais próximo do subtítulo */
-    margin-bottom: 8px; 
+    font-family: var(--font-logo); /* JetBrains Mono */
+    color: var(--text-primary);
+    font-size: 2rem; /* 32px */
+    margin-bottom: 12px;
 }
 
 .form-subtitle {
-    margin-bottom: 20px;
-    color: #666; 
-    font-size: 16px;
+    margin-bottom: 32px;
+    color: var(--text-primary);
+    opacity: 0.7; /* Um cinza ótico gerado pela opacidade */
+    font-family: var(--font-body); /* Questrial */
+    font-size: 1.1rem;
+    line-height: 1.5;
 }

@@ -14,7 +14,14 @@ const ScoreRing: React.FC<ScoreRingProps> = ({ score, statusText }) => {
       <div 
         className="score-ring" 
         style={{ 
-            background: `conic-gradient(var(--accent) 0%, var(--accent) ${normalizedScore}%, #E0E0E0 ${normalizedScore}%, #E0E0E0 100%)`
+            // Usamos var(--brand-secondary) [Menta] para a parte cheia
+            // e uma cor transparente/cinza para o resto
+            background: `conic-gradient(
+                var(--brand-secondary) 0%, 
+                var(--brand-secondary) ${normalizedScore}%, 
+                rgba(0,0,0,0.05) ${normalizedScore}%, 
+                rgba(0,0,0,0.05) 100%
+            )`
         }}
       >
         <div className="score-text">{Math.round(score)}%</div>
