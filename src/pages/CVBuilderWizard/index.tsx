@@ -7,6 +7,7 @@ import ProgressIndicator from '@/pages/CVBuilderWizard/components/ProgressIndica
 import JobDescriptionStep from './steps/JobDescriptionStep'
 import PersonalInfoStep from './steps/PersonalInfoStep'
 import ExperienceStep from './steps/ExperienceStep'
+import ProjectsStep from './steps/ProjectsStep'
 import SkillsStep from './steps/SkillsStep'
 import EducationStep from './steps/EducationStep'
 
@@ -22,6 +23,7 @@ const initialCVRequest: CVRequest = {
     professional_experience: '',
     education: '',
     skills: '',
+    projects: '',
     email: '',
     phone: '',
     target_job_description: '',
@@ -39,6 +41,7 @@ const CVBuilderWizard: React.FC = () => {
         { id: 'job-description', title: 'Descrição da Vaga', component: JobDescriptionStep, required: isOptimized },
         { id: 'personal-info', title: 'Informações Pessoais', component: PersonalInfoStep, required: true },
         { id: 'experience', title: 'Experiência Profissional', component: ExperienceStep, required: true },
+        { id: 'projects', title: 'Projetos Relevantes', component: ProjectsStep, required: true },
         { id: 'skills', title: 'Habilidades', component: SkillsStep, required: true },
         { id: 'education', title: 'Educação', component: EducationStep, required: true },
     ].filter(step => step.required)
@@ -93,7 +96,7 @@ const CVBuilderWizard: React.FC = () => {
         onBack: handleBack,
         isLastStep,
         stepTitle: STEPS[currentStepIndex]?.title ?? '',
-        flowType: isOptimized ? 'Optimized' : 'Generic',
+        flowType: (isOptimized ? 'Optimized' : 'Generic') as 'Optimized' | 'Generic',
     }
 
     return (

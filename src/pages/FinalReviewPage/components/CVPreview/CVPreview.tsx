@@ -30,6 +30,23 @@ const CVPreview: React.FC<CVPreviewProps> = ({ cv }) => {
         ))}
       </div>
       
+          {cv.project_entries && cv.project_entries.length > 0 && (
+            <div className="cv-section">
+              <h3 className="cvp-section-title">Projetos</h3>
+              {cv.project_entries.map((p) => (
+                <div key={`${p.name}`} className="cvp-project-item">
+                  <div>
+                    <strong>{p.name}</strong>
+                    {p.technologies && p.technologies.length > 0 && (
+                      <span className="cvp-tech"> &nbsp; <em>{p.technologies.join(', ')}</em></span>
+                    )}
+                  </div>
+                  <p className="cvp-project-desc">{p.description}</p>
+                </div>
+              ))}
+            </div>
+          )}
+      
       {cv.education_entries.length > 0 && (
           <div className="cv-section">
             <h3 className="cvp-section-title">Educação</h3>
