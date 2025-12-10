@@ -40,21 +40,23 @@ const CVPreview: React.FC<CVPreviewProps> = ({ cv }) => {
       )}
 
       {/* Seção de Experiência Profissional */}
-      {cv.experience_entries.length > 0 && (
-        <div className="cv-section">
-          <h3 className="cvp-section-title">Experiência</h3>
-          {cv.experience_entries.map((e, index) => (
-            <div key={`${e.title}-${e.company}-${index}`} className="cvp-exp-item">
-              <strong>{e.title}</strong> na {e.company} <span className="cvp-period">{e.period}</span>
-              {e.achievements.length > 0 && (
-                <ul className="cvp-achievements">
-                  {e.achievements.map((a, aIndex) => <li key={aIndex}>{a}</li>)}
-                </ul>
-              )}
-            </div>
-          ))}
-        </div>
-      )}
+      <div className="cv-section">
+        <h3 className="cvp-section-title">Experiência</h3>
+        {cv.experience_entries.length > 0 && (
+          <>
+            {cv.experience_entries.map((e, index) => (
+              <div key={`${e.title}-${e.company}-${index}`} className="cvp-exp-item">
+                <strong>{e.title}</strong> na {e.company} <span className="cvp-period">{e.period}</span>
+                {e.achievements.length > 0 && (
+                  <ul className="cvp-achievements">
+                    {e.achievements.map((a, aIndex) => <li key={aIndex}>{a}</li>)}
+                  </ul>
+                )}
+              </div>
+            ))}
+          </>
+        )}
+      </div>
 
       
       {/* Seção de Educação */}

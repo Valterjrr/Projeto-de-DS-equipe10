@@ -1,5 +1,5 @@
 import type { CVRequest, CVResponse, RawAPIResponse } from "@/types/resume";
-import http from "./http";
+import { post } from "./http";
 
 /**
  * Fetch the user's CV by id from the data layer. Returns null when not found.
@@ -16,7 +16,7 @@ export async function fetchUserCV(_userId: string): Promise<CVResponse | null> {
  */
 export async function createCVFromRequest(req: CVRequest): Promise<CVResponse> {
     // CORREÇÃO CRÍTICA: Captura a resposta bruta e extrai o objeto aninhado 'cv_content'
-    const rawResponse = await http.post<RawAPIResponse>("/api/v1/generate-cv", req);
+    const rawResponse = await post<RawAPIResponse>("/api/v1/generate-cv", req);
 
     // Garante que o objeto retornado (CVResponse) corresponde à interface esperada no frontend
     return rawResponse.cv_content;
@@ -28,7 +28,9 @@ export async function createCVFromRequest(req: CVRequest): Promise<CVResponse> {
  */
 export async function submitCVRequest(req: CVRequest): Promise<CVResponse> {
     // Basic validation: required fields (mantido para validação do frontend)
-    if (!req.full_name) throw new Error("full_name is required");
+    if (!req.full_name || !req.desired_role) {
+        throw new Error("Missing required fields: full_name or desired_role");
+    }
     if (!req.professional_experience) throw new Error("professional_experience is required");
     if (!req.education) throw new Error("education is required");
     if (!req.skills) throw new Error("skills is required");
