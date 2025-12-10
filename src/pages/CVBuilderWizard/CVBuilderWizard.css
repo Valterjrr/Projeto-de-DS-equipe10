@@ -56,7 +56,8 @@
 .form-input:focus, .form-textarea:focus, select.form-input:focus {
     border-color: var(--brand-primary); 
     outline: none;
-    box-shadow: 0 0 0 1px var(--brand-primary), 0 0 0 4px rgba(101, 184, 166, 0.25);
+    /* CORREÇÃO: Ajuste do box-shadow para ser mais discreto, resolvendo o visual "quebrado" */
+    box-shadow: 0 0 0 1px var(--brand-primary), 0 0 0 2px var(--brand-secondary); 
 }
 
 .form-textarea {

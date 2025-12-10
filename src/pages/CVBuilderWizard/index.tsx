@@ -7,6 +7,7 @@ import LoadingOverlay from './components/LoadingOverlay/LoadingOverlay'
 import JobDescriptionStep from './steps/JobDescriptionStep'
 import PersonalInfoStep from './steps/PersonalInfoStep'
 import ExperienceStep from './steps/ExperienceStep'
+import ProjectsStep from './steps/ProjectsStep' // NOVO: Importar ProjectsStep
 import SkillsStep from './steps/SkillsStep'
 import EducationStep from './steps/EducationStep'
 
@@ -22,6 +23,7 @@ const initialCVRequest: CVRequest = {
     professional_experience: '',
     education: '',
     skills: '',
+    projects: '', // Adicionado campo projects
     email: '',
     phone: '',
     target_job_description: '',
@@ -55,9 +57,10 @@ const CVBuilderWizard: React.FC = () => {
         { id: 'job-description', title: 'Descrição da Vaga', component: JobDescriptionStep, required: isOptimized },
         { id: 'personal-info', title: 'Informações Pessoais', component: PersonalInfoStep, required: true },
         { id: 'experience', title: 'Experiência Profissional', component: ExperienceStep, required: true },
+        { id: 'projects', title: 'Projetos', component: ProjectsStep, required: true },
         { id: 'skills', title: 'Habilidades', component: SkillsStep, required: true },
         { id: 'education', title: 'Educação', component: EducationStep, required: true },
-    ].filter(step => step.required)
+    ].filter(step => step.required ) // Mantém projetos mesmo que não obrigatório
 
     const totalSteps = STEPS.length
     const isLastStep = currentStepIndex === totalSteps - 1
@@ -115,7 +118,7 @@ const CVBuilderWizard: React.FC = () => {
         data: cvRequest,
         onNext: handleNext,
         onBack: handleBack,
-        isLastStep,
+        isLastStep: isLastStep, // Ajuste provisório para testar Projects
         stepTitle: STEPS[currentStepIndex]?.title ?? '',
         flowType: (isOptimized ? 'Optimized' : 'Generic') as 'Optimized' | 'Generic',
     }
