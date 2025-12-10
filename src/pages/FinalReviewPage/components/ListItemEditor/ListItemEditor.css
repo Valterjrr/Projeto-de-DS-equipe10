@@ -24,7 +24,7 @@
 }
 
 .list-item-wrapper {
-    background: #ffffff; 
+    background: var(--accent-light, #B5E8C3);
     padding: 15px 20px; /* Padding interno consistente */
     display: flex;
     justify-content: space-between;
@@ -101,7 +101,7 @@
     padding: 10px 0;
 }
 .list-item-wrapper {
-    background: #ffffff; 
+    background: var(--accent-light, #B5E8C3);
     border: 1px solid #ddd; /* Borda mais visível */
     padding: 12px; 
     border-radius: 6px;
@@ -147,7 +147,7 @@
     }
 
     .list-item-wrapper {
-        background: #ffffff;
+    background: var(--accent-light, #B5E8C3);
         padding: 15px; /* Padding interno generoso */
         display: flex;
         justify-content: space-between;

@@ -1,58 +1,105 @@
-/* Estilo Padrão (Fundo Escuro - Currículo Personalizado) */
+/* src/shared_components/OptionCard/OptionCard.css */
+
 .start-option-card {
-    background: #2B3A42;
-    color: white;
-    padding: 30px;
-    border-radius: 12px;
+    /* Fundo do cartão usa o Teal escuro (#2D6073) */
+    background-color: var(--color-teal);
+    
+    /* Layout e Espaçamento */
+    padding: 32px 24px;
+    border-radius: var(--border-radius); /* Usando a variável global (12px) */
     max-width: 300px;
-    min-height: 250px;
+    min-height: 260px;
+    width: 100%;
+    
+    /* Comportamento de Botão */
     cursor: pointer;
-    text-align: center;
+    border: 2px solid transparent; /* Prepara para borda sem pular layout */
+    transition: transform 0.2s ease, box-shadow 0.2s ease, border-color 0.2s ease;
+    
+    /* Alinhamento Interno */
     display: flex;
     flex-direction: column;
     align-items: center;
     justify-content: center;
-    gap: 15px;
-    transition: transform 0.3s ease-out, box-shadow 0.3s ease-out, border 0.3s ease-out;
-    border: none; /* reset for button */
+    text-align: center;
+    gap: 16px;
 }
 
-/* Manter o hover padrão para ambos os cartões */
+/* Efeito de Hover (Opcional: Sobe um pouco e cria sombra) */
 .start-option-card:hover {
-    transform: translateY(-8px);
-    box-shadow: 0 15px 30px rgba(0, 0, 0, 0.2);
+    transform: translateY(-4px);
+    box-shadow: 0 12px 24px rgba(45, 96, 115, 0.2);
+    border-color: var(--color-mint); /* Um detalhe sutil de borda ao passar o mouse */
 }
 
+/* 1. Ícone */
 .card-icon {
-    color: white; /* Cor do ícone no fundo escuro */
-    font-size: 40px;
-    line-height: 1;
+    /* Cor solicitada: #B5E8C3 (Verde Claro) */
+    color: var(--color-light-green); 
+    
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin-bottom: 8px;
+}
+.card-icon svg {
+    width: 48px;
+    height: 48px;
 }
 
+/* 2. Título da Opção */
 .card-title {
-    font-size: 20px;
+    /* Cor solicitada: #B5E8C3 (Verde Claro) */
+    color: var(--color-light-green);
+    
+    font-family: var(--font-logo); /* JetBrains Mono */
+    font-size: 1.25rem; /* ~20px */
     font-weight: 700;
     margin: 0;
+    line-height: 1.3;
 }
 
+/* 3. Descrição Pequena */
+/* src/shared_components/OptionCard/OptionCard.css */
+
+/* ... (Mantenha o resto do arquivo igual) ... */
+
+/* 3. Descrição Pequena */
 .card-description {
-    font-size: 14px;
-    opacity: 0.8;
+    /* Forçando a cor creme com !important para garantir que sobreponha qualquer herança */
+    color: var(--color-cream) !important;
+    
+    font-family: var(--font-body); /* Questrial */
+    font-size: 0.95rem; /* ~15px */
+    line-height: 1.5;
     margin: 0;
+    opacity: 0.9; /* Leve transparência */
 }
 
-/* NOVO: Estilo para a variante Outline (Currículo Genérico) */
+/* Ajuste para a variante Outline (Currículo Genérico) se necessário */
+.start-option-card.is-outline .card-description {
+    /* No card branco, o texto deve ser escuro */
+    color: var(--text-primary) !important;
+}
+
+/* --- Variantes (para manter compatibilidade com a página de "Tipo de Currículo") --- */
+
+/* Variante Outline (Borda colorida, fundo transparente) */
 .start-option-card.is-outline {
-    background: #ffffff; /* Fundo branco */
-    color: var(--text-dark, #0b1220); /* Texto escuro */
-    border: 1px solid var(--accent, #2dd4bf); /* Borda na cor de destaque */
+    background-color: transparent;
+    border: 2px solid var(--color-teal);
 }
 
-/* Corrigir a cor do ícone no card Outline */
-.start-option-card.is-outline .card-icon {
-    color: var(--accent, #2dd4bf); /* Ícone na cor de destaque */
+.start-option-card.is-outline .card-icon,
+.start-option-card.is-outline .card-title {
+    color: var(--color-teal);
 }
 
-@media (max-width:860px){
-    .start-option-card{width:100%;max-width:none}
+.start-option-card.is-outline .card-description {
+    color: var(--text-primary);
+}
+
+.start-option-card.is-outline:hover {
+    background-color: rgba(45, 96, 115, 0.05);
+    border-color: var(--color-teal);
 }

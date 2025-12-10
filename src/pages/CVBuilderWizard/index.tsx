@@ -7,6 +7,7 @@ import LoadingOverlay from './components/LoadingOverlay/LoadingOverlay'
 import JobDescriptionStep from './steps/JobDescriptionStep'
 import PersonalInfoStep from './steps/PersonalInfoStep'
 import ExperienceStep from './steps/ExperienceStep'
+import ProjectsStep from './steps/ProjectsStep'
 import SkillsStep from './steps/SkillsStep'
 import EducationStep from './steps/EducationStep'
 

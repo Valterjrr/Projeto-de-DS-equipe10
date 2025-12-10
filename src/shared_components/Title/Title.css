@@ -1,7 +1,0 @@
-.title-root{display:inline-flex;align-items:center;gap:10px}
-.title-mark{background:var(--accent);color:var(--text-dark, #042027);font-weight:800;padding:8px 12px;border-radius:8px;font-size:20px}
-.title-text{display:flex;flex-direction:column}
-.title-main{font-size:20px;font-weight:700}
-.title-sub{font-size:12px;color:#6C7A89}
-.title-small .title-mark{padding:6px 8px;font-size:16px}
-.title-small .title-main{font-size:16px}

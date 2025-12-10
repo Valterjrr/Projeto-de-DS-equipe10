@@ -1,19 +1,20 @@
 /* Copilot, crie o CSS da página. Use o fundo verde-claro e o card branco centralizado, movido para o topo. */
 
 .page-card-layout-root {
-  /* Fundo verde-claro que cobre toda a viewport */
-  /* Corrigir o min-height para incluir o espaço do header global (que não é absoluto nesta página) */
-  min-height: calc(100vh - 0px); /* O Header é estático, então não precisa de ajuste no min-height */
-  background: var(--resources-bg, #E8F5E9);
-  color: var(--text-dark, #0b1220);
+  /* Usa o fundo Creme padrão da aplicação */
+  background-color: var(--bg-app);
+  color: var(--text-primary);
+  
+  /* Layout */
+  min-height: calc(100vh - 0px); 
   padding: 0 20px;
   
-  /* Centraliza o card-container */
+  /* Centralização */
   display: flex;
   justify-content: center;
-  align-items: flex-start; /* NOVO: Alinha o card para o topo (mais bonito visualmente) */
+  align-items: flex-start; /* Alinha no topo */
   
-  /* Ajustar padding-top: Diminuir para mover o card para cima, dando espaço para o Header */
+  /* Espaçamento vertical */
   padding-top: 40px; 
   padding-bottom: 40px; 
   
@@ -22,21 +23,27 @@
 
 /* O grande Card Branco que envolve todo o conteúdo */
 .card-container {
-  background: #ffffff;
-  color: var(--text-dark, #0b1220);
-  border-radius: 16px;
-  box-shadow: 0 10px 40px rgba(0, 0, 0, 0.1);
+  /* CORREÇÃO: Usamos a variável de cartão (Branco) para contraste */
+  background-color: var(--bg-card);
+  
+  /* Texto padrão escuro */
+  color: var(--text-primary);
+  
+  /* Arredondamento padrão */
+  border-radius: var(--border-radius);
+  
+  /* Sombra suave para destacar do fundo creme */
+  box-shadow: 0 10px 40px rgba(0, 0, 0, 0.08);
+  
   max-width: 900px;
   width: 100%;
   
-  /* NOVO: Propriedades para Rolagem Interna do Card */
-  max-height: 90vh; /* Permite que o card ocupe quase toda a altura da tela */
-  overflow-y: auto; /* Habilita a rolagem interna do card */
+  /* Propriedades para Rolagem Interna */
+  max-height: 90vh; 
+  overflow-y: auto; 
   
-  /* NOVO: O card inteiro agora é o elemento scrollável */
-  padding: 0; /* Remover padding aqui e aplicar aos filhos */
+  padding: 0; 
   
-  /* Importante para a posição sticky do Footer funcionar */
   display: flex;
   flex-direction: column; 
 }
@@ -44,11 +51,10 @@
 .content-inner {
     padding: 40px; 
     text-align: center;
-    /* NOVO: Garante que o conteúdo role */
     flex-grow: 1; 
 }
 
-/* NOVO: Container de Opções (Layout de 2 Colunas) */
+/* Container de Opções (Layout de 2 Colunas) */
 .options-container {
   display: flex;
   justify-content: center;
@@ -63,12 +69,15 @@
     align-items: flex-start;
   }
   .card-container {
-    padding: 20px;
+    /* Em telas menores, podemos reduzir o arredondamento ou padding se quiser */
+    padding: 0; 
+  }
+  .content-inner {
+    padding: 30px 20px;
   }
 }
 
-/* Responsividade: Empilhar cards em telas pequenas */
-@media (max-width: 600px) { /* Usar 600px para empilhar antes de 768px */
+@media (max-width: 600px) { 
   .options-container {
     flex-direction: column;
     align-items: center;

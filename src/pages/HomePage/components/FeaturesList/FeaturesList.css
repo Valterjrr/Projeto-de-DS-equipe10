@@ -1,5 +1,5 @@
-.hp-features-title{font-size:22px;margin:0 0 16px 0;font-weight:700}
-.hp-features-list{list-style:none;padding:0;margin:0;font-size:16px;line-height:1.7}
-.hp-features-list li{margin-bottom:12px;display:flex;align-items:center;gap:10px}
-.features-icon{color:var(--accent);flex:0 0 20px}
+.hp-features-title{font-size:28px;margin:0 0 20px 0;font-weight:800}
+.hp-features-list{list-style:none;padding:0;margin:0;font-size:18px;line-height:1.9}
+.hp-features-list li{margin-bottom:16px;display:flex;align-items:flex-start;gap:14px}
+.features-icon{color:var(--accent);flex:0 0 26px;transform:translateY(4px)}
 .hp-features-list li span{display:inline-block}
