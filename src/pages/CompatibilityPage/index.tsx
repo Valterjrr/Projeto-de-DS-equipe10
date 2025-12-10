@@ -18,7 +18,7 @@ const CompatibilityPage: React.FC = () => {
     // O `reviewData` agora deve ser um objeto CVResponse desembrulhado
     const reviewData = location.state?.reviewData as import('@/types/resume').CVResponse | undefined
     const compatibilityData = reviewData?.job_compatibility as JobCompatibilityAnalysis | undefined
-
+    
     // TRATAMENTO DE ERRO MELHORADO: Checa se o CV GERAL foi gerado (o mínimo)
     if (!reviewData?.generated_cv) {
         console.error('ERRO FATAL: Dados do currículo gerado (generated_cv) ausentes no state da navegação.', { reviewData, locationState: location.state })
@@ -52,7 +52,7 @@ const CompatibilityPage: React.FC = () => {
         { id: 'habilidades', label: 'Habilidades', component: SkillsTab },
         { id: 'sugestoes', label: 'Sugestões', component: SuggestionsTab },
         { id: 'aprendizado', label: 'Aprendizado', component: LearningTab },
-    ]
+    ];
 
     return (
         <PageCardLayout>
@@ -61,15 +61,15 @@ const CompatibilityPage: React.FC = () => {
                     <h1 className="main-title form-title">Análise de Compatibilidade</h1>
                     <ScoreRing score={compatibilityData.compatibility_score} statusText={compatibilityData.compatibility_score >= 60 ? 'Boa compatibilidade!' : 'Requer atenção.'} />
                 </div>
-                <div className="tabs-wrapper">
-                    <Tabs<JobCompatibilityAnalysis>
-                        tabs={tabs}
-                        defaultTabId="habilidades"
-                        compatibilityData={compatibilityData}
-                        activeTabId={activeTab}
-                        setActiveTabId={setActiveTab}
-                    />
-                </div>
+                                <div className="tabs-wrapper">
+                                        <Tabs<JobCompatibilityAnalysis>
+                                            tabs={tabs}
+                                            defaultTabId="habilidades"
+                                            compatibilityData={compatibilityData}
+                                            activeTabId={activeTab}
+                                            setActiveTabId={setActiveTab}
+                                        />
+                                </div>
                 <div className="action-footer fixed-bottom">
                     <button
                         className="btn-primary"
@@ -82,7 +82,7 @@ const CompatibilityPage: React.FC = () => {
                 </div>
             </div>
         </PageCardLayout>
-    )
-}
+    );
+};
 export default CompatibilityPage
  
