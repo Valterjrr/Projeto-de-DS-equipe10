@@ -15,13 +15,37 @@ const CompatibilityPage: React.FC = () => {
     const navigate = useNavigate()
     const location = useLocation()
     const [activeTab, setActiveTab] = React.useState<string>('habilidades')
-    // The wizard passes `reviewData` which contains generated_cv and job_compatibility
+    // O `reviewData` agora deve ser um objeto CVResponse desembrulhado
     const reviewData = location.state?.reviewData as import('@/types/resume').CVResponse | undefined
     const compatibilityData = reviewData?.job_compatibility as JobCompatibilityAnalysis | undefined
+    
+    // TRATAMENTO DE ERRO MELHORADO: Checa se o CV GERAL foi gerado (o mínimo)
+    if (!reviewData?.generated_cv) {
+        console.error('ERRO FATAL: Dados do currículo gerado (generated_cv) ausentes no state da navegação.', { reviewData, locationState: location.state })
+        return (
+            <PageCardLayout>
+                <div className="content-inner">
+                    <h1 className="main-title" style={{ color: 'red' }}>⚠️ Erro Crítico: Dados Ausentes</h1>
+                    <p className="subtitle">O backend não retornou o currículo gerado. Por favor, volte e tente novamente.</p>
+                    <button className="btn-back" onClick={() => navigate('/new-cv/builder')}>Voltar ao Formulário</button>
+                </div>
+            </PageCardLayout>
+        )
+    }
+
+    // Tratamento de cenário onde o CV foi gerado, mas a ANÁLISE FALHOU/É NULA
     if (!compatibilityData) {
-        // If compatibility data is not present, redirect home
-        navigate('/', { replace: true });
-        return null;
+        console.warn('AVISO: Dados de análise de compatibilidade (job_compatibility) ausentes ou nulos. Prosseguindo para revisão.', { reviewData })
+        return (
+            <PageCardLayout>
+                <div className="content-inner">
+                    <h1 className="main-title" style={{ color: 'orange' }}>⚠️ Análise Indisponível</h1>
+                    <p className="subtitle">A ferramenta de análise de compatibilidade não pôde ser executada, mas o currículo base foi gerado com sucesso.</p>
+                    <p className="subtitle">Você pode prosseguir para a revisão e edição.</p>
+                    <button className="btn-primary" onClick={() => navigate('/final-review', { state: { reviewData } })}>Revisar Currículo (Sem Análise)</button>
+                </div>
+            </PageCardLayout>
+        )
     }
 
     const tabs: TabItem<JobCompatibilityAnalysis>[] = [

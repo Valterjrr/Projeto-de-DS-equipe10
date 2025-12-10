@@ -1,51 +1,50 @@
-import type { CVRequest } from '@/types/resume'
-import { generateCVFromRequest } from './mockApi'
+import type { CVRequest } from "@/types/resume";
 
-type MetaEnv = { env?: Record<string, string> }
-const meta = (import.meta as unknown) as MetaEnv
-const USE_MOCK = (meta.env?.VITE_USE_MOCK ?? 'true') === 'true'
+/**
+ * Base URL da API para o backend deployado (URL fixada).
+ */
+const API_BASE = "https://aid-curriculum-backend.onrender.com";
 
-async function mockPost<T = unknown>(path: string, body?: unknown): Promise<T> {
-  // simple router for mock endpoints
-  if (path === '/cv') {
-    const req = body as CVRequest
-    const res = await generateCVFromRequest(req)
-    return res as unknown as T
-  }
-  throw new Error(`Mock POST handler not implemented for ${path}`)
-}
-
-async function realPost<T = unknown>(path: string, body?: unknown): Promise<T> {
-  const base = meta.env?.VITE_API_BASE ?? ''
-  const res = await fetch(`${base}${path}`, {
-    method: 'POST',
-    headers: { 'content-type': 'application/json' },
-    body: body ? JSON.stringify(body) : undefined,
-  })
-  if (!res.ok) throw new Error(await res.text())
-  return (await res.json()) as T
-}
-
-async function mockGet<T = unknown>(path: string): Promise<T> {
-  // no GET mocks implemented (API currently does not persist CVs)
-  throw new Error(`Mock GET handler not implemented for ${path}`)
-}
-
-async function realGet<T = unknown>(path: string): Promise<T> {
-  const base = meta.env?.VITE_API_BASE ?? ''
-  const res = await fetch(`${base}${path}`)
-  if (!res.ok) throw new Error(await res.text())
-  return (await res.json()) as T
-}
-
+/**
+ * Realiza uma requisição POST para a API.
+ * @param path O caminho do endpoint (ex: '/api/v1/generate-cv').
+ * @param body O corpo da requisição.
+ * @returns Uma Promise com a resposta JSON tipada.
+ */
 export async function post<T = unknown>(path: string, body?: unknown): Promise<T> {
-  if (USE_MOCK) return mockPost<T>(path, body)
-  return realPost<T>(path, body)
+    const url = `${API_BASE}${path}`;
+    const opts: RequestInit = {
+        method: "POST",
+        headers: { "content-type": "application/json" },
+        body: body ? JSON.stringify(body) : undefined,
+    };
+
+    const res = await fetch(url, opts);
+
+    if (!res.ok) {
+        const errorBody = await res.text();
+        console.error(`ERRO HTTP [${res.status}] em ${url}:`, errorBody);
+        // Incluir o corpo da resposta no erro para debug na camada superior
+        throw new Error(
+            `Falha na requisição. Status: ${res.status}. Detalhes: ${errorBody.substring(0, 200)}`,
+        );
+    }
+    return (await res.json()) as T;
 }
 
+/**
+ * Realiza uma requisição GET para a API.
+ * @param path O caminho do endpoint.
+ * @returns Uma Promise com a resposta JSON tipada.
+ */
 export async function get<T = unknown>(path: string): Promise<T> {
-  if (USE_MOCK) return mockGet<T>(path)
-  return realGet<T>(path)
+    const res = await fetch(`${API_BASE}${path}`);
+    if (!res.ok) {
+        const errorBody = await res.text();
+        console.error(`ERRO HTTP [${res.status}] em ${API_BASE}${path}:`, errorBody);
+        throw new Error(`Falha na requisição GET. Status: ${res.status}.`);
+    }
+    return (await res.json()) as T;
 }
 
-export default { post, get }
+export default { post, get };

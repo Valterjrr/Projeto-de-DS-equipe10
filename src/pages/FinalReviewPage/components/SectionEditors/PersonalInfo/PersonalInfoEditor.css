@@ -5,5 +5,4 @@
 }
 .form-group { display:flex; flex-direction:column; }
 .form-group.full-width { grid-column: 1 / -1; }
-.form-input { padding: 8px; border: 1px solid #ddd; border-radius: 6px; font-size: 14px }
-.form-group label { font-weight: 600; margin-bottom: 6px }
+/* Nota: O estilo dos inputs é herdado de CVBuilderWizard.css */

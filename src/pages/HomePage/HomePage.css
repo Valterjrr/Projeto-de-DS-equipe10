@@ -1,9 +1,9 @@
 :root{
-  --navy: #1A237E; /* hero deep navy */
-  --navy-2: #09306b; /* secondary for gradient */
-  --accent: #2dd4bf; /* teal/cyan accent for logo and buttons */
-  --resources-bg: #E8F5E9; /* light green / beige-like per request */
-  --text-dark: #0b1220;
+  --navy: var(--primary, #2d6073); /* hero deep navy mapped to primary */
+  --navy-2: #234F56; /* slightly darker secondary for gradient */
+  --accent: var(--accent, #65b8a6); /* accent mapped */
+  --resources-bg: var(--resources-bg, var(--bg));
+  --text-dark: var(--text-dark, #1f192f);
 }
 
 /* Reset container */
@@ -11,22 +11,28 @@
   display: flex;
   flex-direction: column;
   min-height: 100vh; /* ensure full viewport height */
-  font-family: Inter, Roboto, system-ui, -apple-system, 'Segoe UI', 'Helvetica Neue', Arial;
+  font-family: inherit;
   color: var(--text-dark);
   align-items: stretch;
+}
+.hp-root{
+  background: var(--bg);
 }
 
 /* HERO / Top section */
 .hp-hero{
   position: relative;
   background: linear-gradient(180deg, var(--navy) 0%, var(--navy-2) 60%);
-  color: #fff;
+  color: var(--fg);
   padding: 80px 20px 56px 20px;
   display: flex;
   align-items: center;
   justify-content: center;
   text-align: center;
   width: 100%; /* ensure full width */
+}
+.hp-hero{
+  padding: 100px 20px 80px 20px;
 }
 
 
@@ -35,6 +41,12 @@
   max-width: 980px;
   margin: 0 auto; /* center hero content */
   z-index: 2;
+}
+.hp-hero-inner{
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 14px;
 }
 
 .hp-logo{
@@ -47,7 +59,7 @@
 .hp-logo-mark{
   display: inline-block;
   background: var(--accent);
-  color: #042027;
+  color: var(--text-dark);
   font-weight: 800;
   padding: 8px 12px;
   border-radius: 8px;
@@ -78,6 +90,10 @@
   flex-grow: 1;
   padding-bottom: 80px;
 }
+.hp-resources{
+  padding: 80px 20px;
+  padding-bottom: 120px;
+}
 
 .hp-resources-inner{
   /* Centraliza e limita a largura do conteúdo interno */
@@ -91,6 +107,11 @@
   align-items: flex-start;
   gap: 40px;
 }
+.hp-resources-inner{
+  max-width: 1200px; /* Largura padrão de conteúdo */
+  padding: 0 24px; /* Padding interno para telas menores */
+  gap: 48px;
+}
 
 .hp-features{flex:2}
 .hp-cta{flex:1;max-width:380px}
@@ -98,12 +119,12 @@
 .hp-cta-copy{
   margin: 0 0 18px 0;
   font-size: 14px;
-  color: #2b3942;
+  color: var(--text-dark);
 }
 
 .hp-cta-button{
   background: var(--accent); /* teal/cyan accent */
-  color: #042027; /* dark text for contrast on accent */
+  color: var(--text-dark); /* dark text for contrast on accent */
   border: none;
   padding: 12px 16px;
   border-radius: 10px;

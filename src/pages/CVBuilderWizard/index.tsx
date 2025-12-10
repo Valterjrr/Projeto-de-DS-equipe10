@@ -2,11 +2,12 @@ import React, { useState } from 'react'
 import { useNavigate, useLocation } from 'react-router-dom'
 import PageCardLayout from '@/shared_components/PageCardLayout/PageCardLayout'
 import ProgressIndicator from '@/pages/CVBuilderWizard/components/ProgressIndicator/ProgressIndicator'
-
-// Importar os componentes de etapa (a serem criados / já existentes como placeholders)
+import LoadingOverlay from './components/LoadingOverlay/LoadingOverlay'
+// Importar os componentes de etapa
 import JobDescriptionStep from './steps/JobDescriptionStep'
 import PersonalInfoStep from './steps/PersonalInfoStep'
 import ExperienceStep from './steps/ExperienceStep'
+import ProjectsStep from './steps/ProjectsStep' // NOVO: Importar ProjectsStep
 import SkillsStep from './steps/SkillsStep'
 import EducationStep from './steps/EducationStep'
 
@@ -22,9 +23,25 @@ const initialCVRequest: CVRequest = {
     professional_experience: '',
     education: '',
     skills: '',
+    projects: '', // Adicionado campo projects
     email: '',
     phone: '',
     target_job_description: '',
+}
+
+// Função para carregar rascunho do sessionStorage, garantindo resiliência
+const loadDraft = (): CVRequest => {
+    try {
+        const draft = sessionStorage.getItem(STORAGE_KEY)
+        if (draft) {
+            // Garantir que os campos padrão estejam presentes mesmo se o JSON for incompleto
+            return { ...initialCVRequest, ...JSON.parse(draft) }
+        }
+    } catch (e) {
+        // Log do erro de parsing JSON, mas continua com o estado inicial
+        console.error('Falha ao carregar ou parsear rascunho do CV da sessionStorage', e)
+    }
+    return initialCVRequest
 }
 
 const CVBuilderWizard: React.FC = () => {
@@ -32,16 +49,18 @@ const CVBuilderWizard: React.FC = () => {
     const location = useLocation()
     const { isOptimized } = (location.state || { isOptimized: false }) as { isOptimized: boolean }
 
-    const [cvRequest, setCvRequest] = useState<CVRequest>(initialCVRequest)
+    const [cvRequest, setCvRequest] = useState<CVRequest>(loadDraft)
     const [currentStepIndex, setCurrentStepIndex] = useState(0)
+    const [isLoading, setIsLoading] = useState(false)
 
     const STEPS = [
         { id: 'job-description', title: 'Descrição da Vaga', component: JobDescriptionStep, required: isOptimized },
         { id: 'personal-info', title: 'Informações Pessoais', component: PersonalInfoStep, required: true },
         { id: 'experience', title: 'Experiência Profissional', component: ExperienceStep, required: true },
+        { id: 'projects', title: 'Projetos', component: ProjectsStep, required: true },
         { id: 'skills', title: 'Habilidades', component: SkillsStep, required: true },
         { id: 'education', title: 'Educação', component: EducationStep, required: true },
-    ].filter(step => step.required)
+    ].filter(step => step.required ) // Mantém projetos mesmo que não obrigatório
 
     const totalSteps = STEPS.length
     const isLastStep = currentStepIndex === totalSteps - 1
@@ -50,6 +69,7 @@ const CVBuilderWizard: React.FC = () => {
     const handleNext = async (data: Partial<CVRequest>) => {
         const newCvRequest = { ...cvRequest, ...data }
         setCvRequest(newCvRequest)
+
         // Persist draft curto no sessionStorage para evitar perda entre recarregamentos
         try {
             sessionStorage.setItem(STORAGE_KEY, JSON.stringify(newCvRequest))
@@ -58,21 +78,28 @@ const CVBuilderWizard: React.FC = () => {
         }
 
         if (isLastStep) {
+            setIsLoading(true)
+
             try {
+                console.log('ENVIANDO CV REQUEST (Final):', newCvRequest) // MANTIDO: Log para rastrear requisição
                 const response = await submitCVRequest(newCvRequest)
+                console.log('RESPOSTA CV SUCESSO:', JSON.stringify(response, null, 2)) // MANTIDO: Log para rastrear resposta
+
                 // Limpar rascunho
                 try { sessionStorage.removeItem(STORAGE_KEY) } catch (e) { console.warn('Could not remove CV draft from sessionStorage', e) }
 
-                // Navega para a página adequada dependendo do fluxo: otimizado => /analysis, genérico => /final-review
-                if (isOptimized) {
-                    navigate('/analysis', { state: { reviewData: response } })
-                } else {
-                    navigate('/final-review', { state: { reviewData: response } })
-                }
+                // Restaura a navegação imediata
+                const targetPath = isOptimized ? '/analysis' : '/final-review'
+                console.log(`Navegando para ${targetPath} com dados de revisão...`)
+
+                navigate(targetPath, { state: { reviewData: response } })
+
             } catch (error) {
-                console.error('Failed to submit CV request', error)
-                // Exibir mensagem simples por enquanto
-                alert('Não foi possível enviar seu currículo. Tente novamente mais tarde.')
+                // O erro já está sendo logado no http.ts, mas logamos aqui para o fluxo
+                console.error('ERRO AO SUBMETER CV:', error)
+                alert(`Não foi possível gerar seu currículo. Verifique o console (F12) para detalhes. Detalhes: ${error instanceof Error ? error.message : 'Erro desconhecido'}`)
+            } finally {
+                setIsLoading(false)
             }
         } else {
             setCurrentStepIndex(i => i + 1)
@@ -91,14 +118,17 @@ const CVBuilderWizard: React.FC = () => {
         data: cvRequest,
         onNext: handleNext,
         onBack: handleBack,
-        isLastStep,
+        isLastStep: isLastStep, // Ajuste provisório para testar Projects
         stepTitle: STEPS[currentStepIndex]?.title ?? '',
-        flowType: isOptimized ? 'Optimized' : 'Generic',
+        flowType: (isOptimized ? 'Optimized' : 'Generic') as 'Optimized' | 'Generic',
     }
 
     return (
         <PageCardLayout>
             <div className="content-inner wizard-page">
+                {/* FLUXO NORMAL: Apenas mostra o overlay de loading enquanto a API chama */}
+                {isLoading && <LoadingOverlay text="Gerando seu currículo inteligente..." />}
+
                 <ProgressIndicator currentStep={currentStepIndex + 1} totalSteps={totalSteps} />
                 <div className="wizard-step-title">{STEPS[currentStepIndex]?.title}</div>
                 <CurrentStepComponent {...stepProps} />
@@ -108,4 +138,5 @@ const CVBuilderWizard: React.FC = () => {
 }
 
 export default CVBuilderWizard
- 
+
+

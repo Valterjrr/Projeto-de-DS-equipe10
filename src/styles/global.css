@@ -1,2 +1,8 @@
-:root{--bg:#0f172a;--fg:#e6eef8}
-body{margin:0;font-family:Inter,system-ui,Arial;background:var(--bg);color:var(--fg)}
+:root{
+	--bg:#F0F7DA;
+	--fg:#1f192f;
+	--primary:#2d6073;
+	--accent:#65b8a6;
+	--accent-light:#B5E8C3;
+}
+body{margin:0;font-family:'JetBrains Mono', Questrial, 'Helvetica World', system-ui, -apple-system, Arial;background:var(--bg);color:var(--fg)}

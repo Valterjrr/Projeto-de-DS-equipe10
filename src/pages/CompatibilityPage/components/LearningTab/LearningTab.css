@@ -2,7 +2,7 @@
 .skill-group-title { font-size: 18px; font-weight: 700; margin-top: 0; margin-bottom: 10px; color: var(--text-dark); }
 .resource-list { list-style: none; padding: 0; }
 .resource-item-box {
-    background: #ffffff;
+    background: var(--bg);
     border: 1px solid #E0E0E0;
     padding: 12px;
     margin-bottom: 8px;
