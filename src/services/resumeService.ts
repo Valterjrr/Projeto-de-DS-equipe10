@@ -1,49 +1,55 @@
-import type { CVRequest, CVResponse } from '@/types/resume'
-import { generateCVFromRequest } from './mockApi'
+import { post, get } from "./http";
+import { CVRequest, CVResponse, RawAPIResponse } from "../types/resume";
 
 /**
- * Fetch the user's CV by id from the data layer. Returns null when not found.
- * In the future, replace the underlying call to a real API.
- */
-/**
- * The real API currently does not persist CVs by id. This function is a
- * placeholder for future DB/API integration and returns null for now.
- */
-// parameter intentionally unused while API is not persisting CVs
-/* eslint-disable-next-line @typescript-eslint/no-unused-vars */
-export async function fetchUserCV(_userId: string): Promise<CVResponse | null> {
-  // Future: call API endpoint to fetch by id
-  return null
-}
-
-/**
- * Generate a CV from a form/request object. Uses the mock generator for now.
+ * Create a CV by calling the real backend endpoint.
+ * The real API returns an envelope { cv_content: CVResponse } so we unwrap it here.
  */
 export async function createCVFromRequest(req: CVRequest): Promise<CVResponse> {
-  return generateCVFromRequest(req)
+    const raw = await post<RawAPIResponse>("/api/v1/generate-cv", req);
+    return raw.cv_content;
+}
+
+export async function submitCVRequest(req: CVRequest): Promise<CVResponse> {
+    // basic validation before sending to API
+    if (!req.full_name || !req.desired_role) {
+        throw new Error("Missing required fields: full_name or desired_role");
+    }
+
+    return createCVFromRequest(req);
 }
 
 /**
- * Public API surface: accept CVRequest and return CVResponse (mocked for now).
- * Mirrors the server contract: input CVRequest -> output CVResponse.
+ * Attempt to fetch a previously created CV by id. Many backends don't persist
+ * generated content — keep this as a best-effort helper and return null when
+ * not available.
  */
-export async function submitCVRequest(req: CVRequest): Promise<CVResponse> {
-  // Basic validation: required fields
-  if (!req.full_name) throw new Error('full_name is required')
-  if (!req.professional_experience) throw new Error('professional_experience is required')
-  if (!req.education) throw new Error('education is required')
-  if (!req.skills) throw new Error('skills is required')
-
-  // Forward to mock generator for now
-  return generateCVFromRequest(req)
+export async function fetchUserCV(id: string): Promise<CVResponse | null> {
+    try {
+        const raw = await get<RawAPIResponse>(`/api/v1/cv/${id}`);
+        return raw.cv_content;
+    } catch (err) {
+        // treat any fetch error as "not found" for now
+        return null;
+    }
 }
 
 /**
  * Convenience: fetch or generate depending on parameters.
  * If userId provided, return stored CV; otherwise generate from request.
  */
-export async function getOrCreateCV(opts: { userId?: string; request?: CVRequest }): Promise<CVResponse | null> {
-  if (opts.userId) return fetchUserCV(opts.userId)
-  if (opts.request) return createCVFromRequest(opts.request)
-  return null
+export async function getOrCreateCV(opts: {
+    userId?: string;
+    request?: CVRequest;
+}): Promise<CVResponse | null> {
+    if (opts.userId) return fetchUserCV(opts.userId);
+    if (opts.request) return createCVFromRequest(opts.request);
+    return null;
 }
+
+export default {
+    createCVFromRequest,
+    submitCVRequest,
+    fetchUserCV,
+    getOrCreateCV,
+};

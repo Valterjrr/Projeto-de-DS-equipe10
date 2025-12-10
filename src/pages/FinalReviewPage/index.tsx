@@ -134,13 +134,14 @@ const FinalReviewPage: React.FC = () => {
   // wrapper to satisfy setter type expected by EditTabsExternal
   const setActiveEditSectionTyped = (s: EditTabsProps['active']) => setActiveEditSection(s)
     
-  // ... (Lógica de erro) ...
+  // CORREÇÃO: Tratamento de Erro Explícito. Mostra mensagem de erro em vez de tela vazia.
   if (!reviewData?.generated_cv || !editableCV) {
     return (
       <PageCardLayout>
         <div className="content-inner">
-          <h1 className="main-title">Erro na Geração</h1>
+          <h1 className="main-title" style={{ color: 'red' }}>⚠️ Erro Crítico: Dados Ausentes</h1>
           <p className="subtitle">Não foi possível carregar os dados do currículo para revisão.</p>
+          <p className="subtitle">Isto pode indicar uma falha na comunicação com a API. Verifique o console do navegador para mais detalhes sobre o erro.</p>
         </div>
       </PageCardLayout>
     )
