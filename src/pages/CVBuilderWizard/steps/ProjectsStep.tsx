@@ -16,7 +16,7 @@ const ProjectsStep: React.FC<Props> = ({ data, onNext, onBack, isLastStep, stepT
   return (
     <FormStepShell
       stepTitle={stepTitle}
-      stepSubtitle="Descreva projetos acadêmicos ou pessoais importantes, com destaque para tecnologias usadas e resultados alcançados."
+      stepSubtitle="Descreva projetos profissionais, acadêmicos ou pessoais importantes, com destaque para tecnologias usadas e resultados alcançados."
       onSubmit={handleSubmit}
       onBack={onBack}
       isLastStep={isLastStep}

@@ -13,6 +13,7 @@ import SkillsEditor from './components/SectionEditors/Skills/SkillsEditor'
 import CertificationsEditor from './components/SectionEditors/Certifications/CertificationsEditor'
 import AchievementsEditor from './components/SectionEditors/Achievements/AchievementsEditor'
 import LanguageListEditor from './components/SectionEditors/Language/LanguageListEditor'
+import ProjectListEditor from './components/SectionEditors/Projects/ProjectListEditor'
 import CVPreview from './components/CVPreview/CVPreview'
 
 // Função auxiliar para atualização aninhada do CV
@@ -23,6 +24,7 @@ const useEditableCV = (initialCV: GeneratedCV | null) => {
     skills: initialCV.skills || [],
     certifications: initialCV.certifications || [],
     experience_entries: initialCV.experience_entries || [],
+    project_entries: initialCV.project_entries || [], // NOVO: Normalizar projetos
     education_entries: initialCV.education_entries || [],
     languages: initialCV.languages || [],
     achievements: initialCV.achievements || [],
@@ -47,7 +49,7 @@ const useEditableCV = (initialCV: GeneratedCV | null) => {
 
 // External EditTabs component (pure, moved out)
 interface EditTabsProps {
-  active: 'personal' | 'summary' | 'experience' | 'education' | 'skills' | 'certifications' | 'languages' | 'achievements'
+  active: 'personal' | 'summary' | 'experience' | 'projects' | 'education' | 'skills' | 'certifications' | 'languages' | 'achievements'
   setActive: (s: EditTabsProps['active']) => void
 }
 
@@ -56,6 +58,7 @@ const EditTabsExternal: React.FC<EditTabsProps> = ({ active, setActive }) => (
     <button className={`tab-btn ${active === 'personal' ? 'active' : ''}`} onClick={() => setActive('personal')}>Dados</button>
     <button className={`tab-btn ${active === 'summary' ? 'active' : ''}`} onClick={() => setActive('summary')}>Resumo</button>
     <button className={`tab-btn ${active === 'experience' ? 'active' : ''}`} onClick={() => setActive('experience')}>Experiência</button>
+    <button className={`tab-btn ${active === 'projects' ? 'active' : ''}`} onClick={() => setActive('projects')}>Projetos</button> {/* NOVO: Aba Projetos */}
     <button className={`tab-btn ${active === 'education' ? 'active' : ''}`} onClick={() => setActive('education')}>Educação</button>
     <button className={`tab-btn ${active === 'skills' ? 'active' : ''}`} onClick={() => setActive('skills')}>Habilidades</button>
     <button className={`tab-btn ${active === 'certifications' ? 'active' : ''}`} onClick={() => setActive('certifications')}>Certificados</button>
@@ -84,6 +87,8 @@ const EditorContentExternal: React.FC<EditorContentProps> = ({ active, editableC
       return <SummaryEditor value={editableCV.professional_summary} onChange={(v) => updateCV({ professional_summary: v })} />
     case 'experience':
       return <ExperienceListEditor items={editableCV.experience_entries} onUpdateList={(newList) => updateCV({ experience_entries: newList })} />
+    case 'projects': // NOVO: Case Projetos
+        return <ProjectListEditor items={editableCV.project_entries || []} onUpdateList={(newList) => updateCV({ project_entries: newList })} />
     case 'education':
       return <EducationListEditor items={editableCV.education_entries} onUpdateList={(newList) => updateCV({ education_entries: newList })} />
     case 'skills':
@@ -135,13 +140,14 @@ const FinalReviewPage: React.FC = () => {
   // wrapper to satisfy setter type expected by EditTabsExternal
   const setActiveEditSectionTyped = (s: EditTabsProps['active']) => setActiveEditSection(s)
     
-  // ... (Lógica de erro) ...
+  // CORREÇÃO: Tratamento de Erro Explícito. Mostra mensagem de erro em vez de tela vazia.
   if (!reviewData?.generated_cv || !editableCV) {
     return (
       <PageCardLayout>
         <div className="content-inner">
-          <h1 className="main-title">Erro na Geração</h1>
+          <h1 className="main-title" style={{ color: 'red' }}>⚠️ Erro Crítico: Dados Ausentes</h1>
           <p className="subtitle">Não foi possível carregar os dados do currículo para revisão.</p>
+          <p className="subtitle">Isto pode indicar uma falha na comunicação com a API. Verifique o console do navegador para mais detalhes sobre o erro.</p>
         </div>
       </PageCardLayout>
     )

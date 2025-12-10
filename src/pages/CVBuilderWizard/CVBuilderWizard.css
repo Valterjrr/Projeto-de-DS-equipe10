@@ -4,12 +4,13 @@
     width: 100%;
 }
 
+/* O título da etapa (Passo 1 de 5) */
 .wizard-step-title {
     margin: 1rem 0 0.5rem 0;
     font-weight: 600;
     color: var(--text-primary);
     font-family: var(--font-body);
-    opacity: 0.6; /* Deixa o contador de passos (Ex: Passo 1 de 4) mais discreto */
+    opacity: 0.6;
     font-size: 0.9rem;
 }
 
@@ -19,7 +20,7 @@
     text-align: left;
 }
 
-/* --- INPUTS E TEXTAREAS --- */
+/* --- INPUTS E TEXTAREAS (Estilo de Formulário Global) --- */
 
 .form-group {
     margin-bottom: 24px;
@@ -30,32 +31,33 @@
     font-weight: 700;
     margin-bottom: 8px;
     color: var(--text-primary);
-    font-family: var(--font-logo); /* JetBrains Mono para os rótulos (Labels) */
+    font-family: var(--font-logo);
     font-size: 0.9rem;
 }
 
-.form-input, .form-textarea {
+.form-input, .form-textarea, select.form-input {
     width: 100%;
     padding: 14px;
     
-    /* Visual "Paper" */
-    background-color: #ffffff; /* Fundo branco para input */
-    border: 2px solid rgba(0,0,0,0.1); /* Borda sutil */
+    /* Visual Limpo/Branco */
+    background-color: var(--bg-card);
+    border: 1px solid var(--brand-secondary);
     border-radius: 8px;
     
     font-size: 1rem;
-    font-family: var(--font-body); /* Questrial para o que o usuário digita */
+    font-family: var(--font-body);
     color: var(--text-primary);
     
     box-sizing: border-box;
     transition: border-color 0.2s, box-shadow 0.2s;
 }
 
-/* Foco: Quando clica no input */
-.form-input:focus, .form-textarea:focus {
-    border-color: var(--brand-secondary); /* Fica Menta (#65B8A6) ao focar */
+/* Foco: Borda Forte (Teal Escuro) e Brilho Suave (Menta) */
+.form-input:focus, .form-textarea:focus, select.form-input:focus {
+    border-color: var(--brand-primary); 
     outline: none;
-    box-shadow: 0 0 0 3px rgba(101, 184, 166, 0.15); /* Brilho Menta suave */
+    /* CORREÇÃO: Ajuste do box-shadow para ser mais discreto, resolvendo o visual "quebrado" */
+    box-shadow: 0 0 0 1px var(--brand-primary), 0 0 0 2px var(--brand-secondary); 
 }
 
 .form-textarea {
@@ -78,4 +80,35 @@
     .form-grid {
         grid-template-columns: 1fr; 
     }
+}
+
+/* --- Loading Overlay (Limpo) --- */
+.loading-overlay {
+    position: absolute;
+    inset: 0;
+    background: rgba(255, 255, 255, 0.9);
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    z-index: 1000;
+    color: var(--text-dark, #0b1220);
+    font-weight: 600;
+    border-radius: 16px;
+}
+
+/* Spinner CSS simples */
+.loading-spinner {
+    border: 4px solid #f3f3f3;
+    border-top: 4px solid var(--brand-primary);
+    border-radius: 50%;
+    width: 40px;
+    height: 40px;
+    animation: spin 1s linear infinite;
+    margin-bottom: 10px;
+}
+
+@keyframes spin {
+    0% { transform: rotate(0deg); }
+    100% { transform: rotate(360deg); }
 }

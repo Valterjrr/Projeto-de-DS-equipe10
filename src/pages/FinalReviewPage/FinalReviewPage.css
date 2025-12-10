@@ -13,13 +13,11 @@
 	opacity: 0.7;
 }
 
-/* --- TOGGLE (Botão de Alternância) --- */
+/* --- TOGGLE (Botão de Alternância Edição/Prévia) --- */
 .view-toggle {
 	margin-bottom: 30px;
-	/* Borda sutil */
 	border: 1px solid rgba(0,0,0,0.1);
 	background-color: #f7f7f7; 
-	
 	display: inline-flex;
 	border-radius: 12px;
 	padding: 4px;
@@ -32,8 +30,7 @@
 	padding: 10px 20px;
 	border-radius: 8px;
 	cursor: pointer;
-	
-	font-family: var(--font-logo); /* JetBrains Mono */
+	font-family: var(--font-logo);
 	font-weight: 600;
 	font-size: 0.9rem;
 	opacity: 0.6;
@@ -46,9 +43,7 @@
 	opacity: 0.8;
 }
 
-/* Estado Ativo */
 .toggle-btn.active {
-	/* Fundo Teal */
 	background-color: var(--brand-primary);
 	color: var(--text-inverted);
 	opacity: 1;
@@ -56,39 +51,102 @@
 	box-shadow: 0 2px 4px rgba(0,0,0,0.1);
 }
 
-/* --- EDITORES --- */
-.editor-panel, .preview-panel {
-	text-align: left;
-}
-
+/* --- ABAS INTERNAS DE EDIÇÃO (Menu de Seções) --- */
 .edit-tabs-nav {
 	display: flex;
+	justify-content: flex-start;
 	overflow-x: auto;
 	padding-bottom: 10px;
-	margin-bottom: 20px;
-	border-bottom: 1px solid rgba(0,0,0,0.1);
+	margin-bottom: 15px;
+	border-bottom: 1px solid rgba(0,0,0,0.05);
 	gap: 15px;
 }
 
 .edit-tabs-nav .tab-btn {
-	background: none;
+	padding: 8px 12px;
 	border: none;
+	background: none;
 	color: var(--text-primary);
-	opacity: 0.5;
-	font-family: var(--font-body);
+	opacity: 0.6;
+	font-family: var(--font-logo);
 	font-weight: 600;
 	cursor: pointer;
-	padding-bottom: 8px;
 	border-bottom: 2px solid transparent;
 	transition: all 0.2s;
+	flex-shrink: 0;
 }
 
 .edit-tabs-nav .tab-btn.active {
 	opacity: 1;
-	color: var(--brand-primary);
-	border-bottom-color: var(--brand-secondary); /* Linha Menta embaixo */
+	color: var(--brand-primary); /* Teal Escuro */
+	border-bottom-color: var(--brand-secondary); /* Menta */
 }
 
+/* --- PAINEL DE EDIÇÃO E PREVIEW (GRID) --- */
+.review-area-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr; /* Padrão desktop */
+    gap: 30px;
+    text-align: left;
+}
+
+.editor-panel, .preview-panel {
+	padding: 0;
+	border-radius: 12px;
+	overflow-y: auto;
+	height: 60vh; 
+	position: relative;
+
+	display: none; /* Escondido por padrão */
+}
+
+.editor-panel.active,
+.preview-panel.active {
+		display: block; 
+}
+
+/* Força a coluna ativa a ocupar toda a largura no desktop */
+@media (min-width: 901px) {
+	.review-area-grid:has(.editor-panel.active):not(:has(.preview-panel.active)) {
+		grid-template-columns: 1fr; 
+	}
+
+	.review-area-grid:has(.preview-panel.active):not(:has(.editor-panel.active)) {
+		grid-template-columns: 1fr;
+	}
+
+	/* Se ambos ativos (modo dev/erro), volta para 1fr 1fr */
+	.review-area-grid:has(.editor-panel.active):has(.preview-panel.active) {
+		grid-template-columns: 1fr 1fr;
+	}
+}
+
+@media (max-width: 900px) {
+    .review-area-grid {
+        grid-template-columns: 1fr;
+        gap: 0;
+    }
+
+	.editor-panel,
+	.preview-panel {
+		height: auto;
+		padding: 0 10px;
+	}
+}
+
+/* --- Estilo Específico de Títulos de Editores --- */
+.editor-section-title {
+    font-family: var(--font-logo); /* JetBrains Mono */
+    font-size: 1.1rem; /* 18px */
+    font-weight: 700;
+    color: var(--brand-primary); /* Cor Teal */
+    margin-top: 25px;
+    margin-bottom: 15px;
+    border-bottom: 2px solid var(--brand-secondary); /* Menta */
+    padding-bottom: 5px;
+}
+
+/* --- Footer de Ação --- */
 .action-footer {
 	margin-top: 40px;
 	padding-top: 20px;

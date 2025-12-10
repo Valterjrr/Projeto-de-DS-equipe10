@@ -13,6 +13,7 @@ const SkillsEditor: React.FC<SkillsEditorProps> = ({ initialContent, onUpdate, t
     
     const handleUpdate = (value: string) => {
         setContent(value);
+        // Permite que SkillsEditor seja usado para Certifications e Achievements (onde o separador é nova linha)
         const list = (isMultiline ? value.split('\n') : value.split(',')).map(s => s.trim()).filter(Boolean);
         onUpdate(list);
     };
@@ -20,9 +21,10 @@ const SkillsEditor: React.FC<SkillsEditorProps> = ({ initialContent, onUpdate, t
     return (
         <div className="editor-section">
             <h3 className="editor-section-title">{title}</h3>
+            {/* CORREÇÃO: Usar a classe de estilo universal 'form-textarea' */}
             <textarea
-                className="editor-textarea"
-                rows={isMultiline ? 6 : 4}
+                className="form-textarea"
+                rows={isMultiline ? 8 : 4}
                 value={content}
                 onChange={(e) => handleUpdate(e.target.value)}
                 placeholder={placeholder}

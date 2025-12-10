@@ -2,17 +2,19 @@
     padding-top: 10px;
 }
 
+/* Título principal do passo (Ex: Informações Pessoais) */
 .form-title {
     font-family: var(--font-logo); /* JetBrains Mono */
     color: var(--text-primary);
-    font-size: 2rem; /* 32px */
+    font-size: 2rem; /* 32px - Grande e forte, como nos mocks 5A */
     margin-bottom: 12px;
 }
 
+/* Subtítulo do passo (Descrição da etapa) */
 .form-subtitle {
     margin-bottom: 32px;
     color: var(--text-primary);
-    opacity: 0.7; /* Um cinza ótico gerado pela opacidade */
+    opacity: 0.7;
     font-family: var(--font-body); /* Questrial */
     font-size: 1.1rem;
     line-height: 1.5;
