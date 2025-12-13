@@ -112,6 +112,23 @@ O front-end utiliza **Vitest** para testes unitários e de componentes, integrad
 
 Todas as instruções detalhadas para configurar o ambiente de desenvolvimento, incluindo a instalação de dependências (tanto Node.js quanto Python) e a criação/ativação do ambiente virtual (`venv`), estão localizadas em nosso arquivo de [**Diretrizes de Contribuição (CONTRIBUTING.md)**](./CONTRIBUTING.md).
 
+## 🚀 Deploy
+
+O projeto possui configuração predefinida para o **Vercel** no arquivo \`vercel.json\`.
+
+### Para realizar o deploy automático
+1. Crie uma conta no [Vercel](https://vercel.com).
+2. Importe este repositório do GitHub.
+3. As configurações de build serão detectadas automaticamente.
+4. O deploy será atualizado automaticamente a cada push na branch \`main\`.
+
+### Para realizar o deploy manual:
+Se preferir usar a CLI do Vercel:
+\`\`\`bash
+npm i -g vercel
+vercel
+\`\`\`
+
 ## 🤝 Como Contribuir
 
 Contribuições são muito bem-vindas!  

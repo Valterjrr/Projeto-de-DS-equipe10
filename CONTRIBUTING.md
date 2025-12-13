@@ -91,7 +91,7 @@ Antes de abrir um PR, verifique:
     npm run dev
     ```
 
-Além disso, também recomendamos a criação e o uso de um ambiente virtual para evitar conflitos de versões de pacotes em seu sistema operacional:
+Além disso, para executar o [Back-end](https://github.com/LugiaKB/aid_curriculum_backend), localizado em outro repositório, também recomendamos a criação e o uso de um ambiente virtual para evitar conflitos de versões de pacotes em seu sistema operacional:
 
 1.  **Criação do Ambiente Virtual (`venv`):**
 
@@ -120,3 +120,18 @@ Além disso, também recomendamos a criação e o uso de um ambiente virtual par
     ```bash
     deactivate
     ```
+
+## 📦 Build para Produção
+
+Para gerar a versão otimizada para produção, execute:
+
+\`\`\`bash
+npm run build
+\`\`\`
+
+Isso criará os arquivos estáticos prontos para deploy na pasta \`build\`.
+Após rodar o build, você pode visualizar a aplicação como ela se comportará em produção rodando:
+
+\`\`\`bash
+npm run preview
+\`\`\`
